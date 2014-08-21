@@ -1,0 +1,34 @@
+{
+    "name": "switchsystems/precision-maths",
+    "description": "Wrapper for BCMath ext for precise basic and advanced math operations",
+    "type": "library",
+    "license": "proprietary",
+        
+    "minimum-stability" : "dev",
+    "prefer-stable": true,
+        
+    "require":
+    {
+        "php": ">=5.4.0",
+    },
+    
+    "require-dev":
+    {
+        "phpunit/phpunit": "~3.7",
+    },
+    
+    "autoload":
+    {
+        "psr-0": 
+        {
+            "precision-maths\\": "src/"
+        }
+    },
+    "extra":
+    {
+        "branch-alias":
+        {
+            "dev-master": "1.x-dev"
+        }
+    },
+}
