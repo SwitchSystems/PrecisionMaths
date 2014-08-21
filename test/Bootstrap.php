@@ -2,7 +2,6 @@
 namespace PrecisionMathsTest;
 
 putenv('APPLICATION_ENV=test');
-
 error_reporting(-1);
 
 class Bootstrap
