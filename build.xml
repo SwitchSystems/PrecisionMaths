@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="precision-maths" default="build">
+<project name="PrecisionMaths" default="build">
 	<target name="build" depends="tests" />
 
 	<target name="copy-codecoverage" depends="coverage-exists" if="exists" description="Copy previous tests code coverage so that it can still be viewed when new build runs">
