@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit bootstrap="Bootstrap.php">
+	<testsuites>
+		<testsuite name="PrecisionMaths">
+			<directory>./PrecisionMathsTest</directory>
+		</testsuite>
+	</testsuites>
+	
+	<filter>
+		<whitelist>
+			<directory>../src/PrecisionMaths</directory>
+		</whitelist>
+	</filter>
+</phpunit>

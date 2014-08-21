@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="precision-maths" default="build">
+	<target name="build" depends="tests" />
+
+	<target name="copy-codecoverage" depends="coverage-exists" if="exists" description="Copy previous tests code coverage so that it can still be viewed when new build runs">
+		<delete dir="${basedir}/build/coverage/previous/"/>
+		<mkdir dir="${basedir}/build/coverage/previous/"/>
+		<copy todir="${basedir}/build/coverage/previous/">
+			<dirset dir="${basedir}/build/coverage/current/" includes="**"/>
+			<fileset dir="${basedir}/build/coverage/current/" includes="**"/>
+		</copy>
+	</target>
+
+	<target name="coverage-exists" depends="coveragedir-exists" if="dir.exists">
+		<pathconvert property="exists" setonempty="false" pathsep=" ">
+			<path>
+				<dirset dir="${basedir}/build/coverage/current/" includes="*-clover" />
+			</path>
+		</pathconvert>
+		
+		<condition property="exists">
+			<available file="" type="dir" />
+		</condition>
+	</target>
+	
+	<target name="coveragedir-exists">
+		<condition property="dir.exists">
+			<available file="${basedir}/build/coverage/current/" type="dir"/>
+		</condition>
+	</target>
+
+	<target name="clean" depends="copy-codecoverage" description="Cleanup build artifacts">
+		<delete dir="${basedir}/build/results/"/>
+		<delete dir="${basedir}/build/coverage/current/"/>
+	</target>
+
+	<target name="prepare" depends="clean" description="Prepare for build">
+		<mkdir dir="${basedir}/build/results/"/>
+		<mkdir dir="${basedir}/build/coverage/current/"/>
+	</target>
+
+	<target name="composer-selfupdate" description="Updates composer to the latest version">
+		<exec executable="composer" failonerror="true">
+			<arg value="self-update" />
+		</exec>
+	</target>
+
+	<target name="composer-install" depends="composer-selfupdate" description="Installs dependencies via composer update">
+		<exec executable="composer" failonerror="true">
+			<arg value="install" />
+		</exec>
+	</target>
+
+	<target
+        name="tests"
+        depends="prepare,composer-install"
+        description="Run tests for the various modules"
+    >
+		<!-- add a module name here in order to run their unit test suites -->
+		<component-test component="PrecisionMaths"/>
+	</target>
+
+	<macrodef name="component-test">
+		<attribute name="component"/>
+		<sequential>
+			<echo output="${basedir}/build/results/@{component}.log" level="debug">
+                src/@{component}
+            </echo>
+			<exec
+                    executable="${basedir}/vendor/bin/phpunit"
+                    output="${basedir}/build/results/@{component}.log"
+                    error="${basedir}/build/results/@{component}.log"
+                    failonerror="true"
+                    append="true"
+                    >
+				<arg value="-d"/>
+				<arg value="zend.enable_gc=0"/>
+				<!-- Disable garbage collection in phpunit to prevent heap corruption generating code coverage reports -->
+				<arg value="--coverage-clover"/>
+				<arg value="${basedir}/build/coverage/current/@{component}-clover.xml"/>
+				<arg value="--coverage-html"/>
+				<arg value="${basedir}/build/coverage/current/@{component}-clover/"/>
+				<arg value="--log-junit"/>
+				<arg value="${basedir}/build/results/@{component}-junit.xml"/>
+				<arg value="-c" />
+				<arg value="${basedir}/test/phpunit.xml.dist" />
+				<arg value="${basedir}/test/@{component}Test" />
+			</exec>
+		</sequential>
+	</macrodef>
+
+</project>
