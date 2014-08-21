@@ -3,5 +3,4 @@ namespace PrecisionMaths;
 
 class Addition
 {
-	
 }
