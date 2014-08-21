@@ -107,4 +107,13 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $result = $number->ceil();
 	    $this->assertEquals("-2", $result);
 	}
+	
+	public function testIsNegative()
+	{
+	    $negativeNumber = new Number('-2.4');
+	    $positiveNumber = new Number('2.4');
+	    
+	    $this->assertTrue($negativeNumber->isNegative());
+	    $this->assertFalse($positiveNumber->isNegative());
+	}
 }

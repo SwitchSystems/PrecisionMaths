@@ -284,7 +284,7 @@ class Number
      *
      * @return bool
      */
-    public function isValid($value)
+    protected function isValid($value)
     {
     	switch (preg_match('/^\-?\d+(\.\d+)?$/', $value)) {
     	   case 0:
