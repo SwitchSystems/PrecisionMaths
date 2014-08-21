@@ -2,7 +2,13 @@
 namespace PrecisionMaths;
 
 trait InitialiseNumberTrait
-{
+{    
+    protected static $validTypesList = [
+	    'integer',
+	    'string',
+	    'double'
+    ];
+    
     /**
      * Sets the value to an instance of number if valid
      *

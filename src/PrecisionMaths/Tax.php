@@ -5,13 +5,7 @@ use RuntimeException;
 
 class Tax
 {
-    use PrecisionMaths\InitialiseNumberTrait;
-    
-    public static $validTypesList = [
-	    'integer',
-	    'string',
-	    'double'
-    ];
+    use \PrecisionMaths\InitialiseNumberTrait;
     
     /**
      * Current Tax Rate

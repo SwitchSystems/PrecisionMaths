@@ -5,7 +5,7 @@ use ArrayObject;
 
 class NumberCollection extends ArrayObject
 {
-    use PrecisionMaths\InitialiseNumberTrait;
+    use \PrecisionMaths\InitialiseNumberTrait;
     
     /**
      * Default scale for BC MATH operation

@@ -2,6 +2,7 @@
 namespace PrecisionMathsTest;
 
 use PrecisionMaths\Number;
+
 class NumberTest extends \PHPUnit_Framework_TestCase
 {
 	public function testCanIntatiateNumber()
@@ -70,9 +71,40 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	
 	    $result = $number->mul($rightOperandString);
 	    $this->assertEquals("58.334057594934298",  $result);
-	    bcscale(20);
-	    $innerval = bcdiv(20, 100);
-	    $value = bcmul($innerval, 200);
-	    var_dump(gettype($number));
+	}
+	
+	public function testDivideOperation()
+	{
+	    $valueString = '10.919191919';
+	    $rightOperandString = '5.342342';
+	
+	    $number = new Number($valueString);
+	    $result = $number->divide($rightOperandString);
+	    $this->assertEquals("2.04389608883145257267", $result);
+	
+	    $result = $number->div($rightOperandString);
+	    $this->assertEquals("2.04389608883145257267",  $result);
+	}
+	
+	public function testFloorOperation()
+	{
+	    $number = new Number('2.4');
+	    $result = $number->floor();
+	    $this->assertEquals("2", $result);
+	    
+	    $number = new Number('-2.4');
+	    $result = $number->floor();
+	    $this->assertEquals("-3", $result);
+	}
+	
+	public function testCeilOperation()
+	{
+	    $number = new Number('2.4');
+	    $result = $number->ceil();
+	    $this->assertEquals("3", $result);
+	     
+	    $number = new Number('-2.4');
+	    $result = $number->ceil();
+	    $this->assertEquals("-2", $result);
 	}
 }

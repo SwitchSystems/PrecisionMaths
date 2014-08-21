@@ -6,7 +6,7 @@ use RuntimeException;
 
 class Number
 {
-    use PrecisionMaths\InitialiseNumberTrait;
+    use \PrecisionMaths\InitialiseNumberTrait;
     
     /**
      * Default scale for BC MATH operation
@@ -234,9 +234,9 @@ class Number
     
     public function floor()
     {
-        $result = $this->mul('1', 0);
+        $result = $this->initialiseNumber(bcmul($this, '1', 0));
         
-        if (isNegative($this)) {
+        if ($this->isNegative()) {
             $result = $result->sub('1', 0);
         }
         
@@ -245,9 +245,14 @@ class Number
     
     public function ceil()
     {
-        $floor = $this->floor();
-
-        return $this->initialiseNumber($floor->add('1', 0));
+        if ($this->isNegative()) {
+            $result = bcmul($this, '1', 0);
+            
+            return $this->initialiseNumber($result, 0);
+        } else {
+            $floor = $this->floor();
+            return $this->initialiseNumber($floor->add('1', 0));
+        }
     }
     
     public function round($precision, $type)
@@ -257,7 +262,7 @@ class Number
     
     public function isNegative()
     {
-    	if (substr($this, 0) === '-') {
+    	if (substr($this, 0, 1) === '-') {
     	   return true;
     	}
     	
