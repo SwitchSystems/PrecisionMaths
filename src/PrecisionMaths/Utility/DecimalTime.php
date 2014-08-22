@@ -36,6 +36,16 @@ class DecimalTime
     /**
      * @var string
      */
+    const SECONDS_IN_DAY = '86400';
+    
+    /**
+     * @var string
+     */
+    const SECONDS_IN_HOUR = '3600';
+    
+    /**
+     * @var string
+     */
     protected $scale;
     
     public function __construct($scale = null)
@@ -90,24 +100,47 @@ class DecimalTime
 	    
 	    // Calculate the minutes from days and assign to $minutes
 	    $minutes = (new Number($dateInterval->d, $this->scale))->mul(static::MINUTES_IN_DAY);
-
+	    
 	    // Calculate minutes from hours and add to $minutes
 	    $minutesFromHours = (new Number($dateInterval->h, $this->scale))->mul(static::MINUTES_IN_HOUR);
-	    $minutes->add($minutesFromHours);
+	    $minutes = $minutes->add($minutesFromHours);
 	    
 	    // Add minutes
-	    $minutes->add($dateInterval->i);
+	    $minutes = $minutes->add($dateInterval->i);
 	    
 	    // Calculate minutes from seconds and add to $minutes
 	    $minutesFromSeconds = (new Number($dateInterval->s, $this->scale))->div(static::SECONDS_IN_MINUTE);
-	    $minutes->add($minutesFromSeconds);
+	    $minutes = $minutes->add($minutesFromSeconds);
 	    
 	    return $minutes;
 	}
 	
+	/**
+	 * Returns decimal seconds from the range provided
+	 * 
+	 * @param DateTime $start
+	 * @param DateTime $end
+	 * @return PrecisionMaths\Number
+	 */
 	public function dateRangeAsSeconds(DateTime $start, DateTime $end)
 	{
+	    $dateInterval = $this->calculateDateDiff($start, $end);
+	    
+	    // Calculate the seconds from days and assign to $seconds
+	    $seconds = (new Number($dateInterval->d, $this->scale))->mul(static::SECONDS_IN_DAY);
+	    
+	    // Calculate the seconds from hours and add to $seconds
+	    $secondsFromHours = (new Number($dateInterval->h, $this->scale))->mul(static::SECONDS_IN_HOUR);
+	    $seconds = $seconds->add($secondsFromHours);
+	    
+	    // Calculate seconds from minutes and add to $seconds
+	    $secondsFromMinutes = (new Number($dateInterval->i, $this->scale))->mul(static::SECONDS_IN_MINUTE);
+	    $seconds = $seconds->add($secondsFromMinutes);
 	
+	    // Add seconds
+	    $seconds = $seconds->add($dateInterval->s);
+	    
+	    return $seconds;
 	}
 
 	/**

@@ -17,6 +17,10 @@ class NumberCollection extends ArrayObject
      */
     protected $scale;
     
+    /**
+     * @param array $array
+     * @param string $scale
+     */
     public function __construct(array $array, $scale = null)
     {
     	sort($array);

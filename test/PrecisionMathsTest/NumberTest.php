@@ -199,4 +199,14 @@ class NumberTest extends \PHPUnit_Framework_TestCase
     	$result = $number->precisionRound('1');
     	$this->assertEquals('2.4', $result);
 	}
+	
+	public function testAddingPreciseNumbersTogether()
+	{
+	    $number = new Number('2.5');
+	    $numberTwo = new Number('2.5');
+	
+	    $result = $number->add($numberTwo);
+	    
+	    $this->assertEquals('5.000000000000000000000', $result);
+	}
 }
