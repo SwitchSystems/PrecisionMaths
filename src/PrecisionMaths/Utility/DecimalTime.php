@@ -97,22 +97,45 @@ class DecimalTime
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    // Calculate the hours in a day and assign to $hours
-	    $hours = (new Number($dateInterval->d, $this->scale))->mul(static::HOURS_IN_DAY);
-
-	    // Add the hours
-	    $hours = $hours->add($dateInterval->h);
-	     
-	    // Calculate the minutes value in hours and add to $hours
-	    $hoursFromMinutes = (new Number($dateInterval->i, $this->scale))->div(static::MINUTES_IN_HOUR);
-	    $hours = $hours->add($hoursFromMinutes);
-	     
-	    // Calculate the seconds value in hours and add to $hours
-	    $secondsInMinutes = (new Number($dateInterval->s, $this->scale))->div(static::SECONDS_IN_MINUTE);
-	    $hoursFromSeconds = $secondsInMinutes->div(static::MINUTES_IN_HOUR);
-	    $hours = $hours->add($hoursFromSeconds);
+	    $hours = $this->convertDaysToHours($dateInterval->d)
+	                  ->add($dateInterval->h)
+	                  ->add($this->convertMinutesToHours($dateInterval->i))
+	                  ->add($this->convertSecondsToHours($dateInterval->s));
 	    
 	    return $hours;
+	}
+	
+	/**
+	 * Converts decimal days into decimal hours
+	 *
+	 * @param mixed $days
+	 * @return PrecisionMaths\Number
+	 */
+	public function convertDaysToHours($days)
+	{
+		return (new Number($days, $this->scale))->mul(static::HOURS_IN_DAY);
+	}
+
+	/**
+	 * Converts decimal minutes into decimal hours
+	 *
+	 * @param mixed $minutes
+	 * @return PrecisionMaths\Number
+	 */
+	public function convertMinutesToHours($minutes)
+	{
+		return (new Number($minutes, $this->scale))->div(static::MINUTES_IN_HOUR);
+	}
+	
+	/**
+	 * Converts decimal seconds into decimal hours
+	 * 
+	 * @param mixed $seconds
+	 * @return PrecisionMaths\Number
+	 */
+	public function convertSecondsToHours($seconds)
+	{
+		return (new Number($seconds, $this->scale))->div(static::SECONDS_IN_HOUR);
 	}
 	
 	/**
