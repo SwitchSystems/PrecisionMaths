@@ -116,4 +116,31 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertTrue($negativeNumber->isNegative());
 	    $this->assertFalse($positiveNumber->isNegative());
 	}
+	
+	public function testRound()
+	{
+	    $number = new Number('2.43434');
+	    $result = $number->round(2);
+	    $this->assertEquals('2.43', $result);
+	    
+	    $number = new Number('2.43634');
+	    $result = $number->round(2);
+	    $this->assertEquals('2.44', $result);
+	    
+	    $number = new Number('2.43534');
+	    $result = $number->round(2);
+	    $this->assertEquals('2.44', $result);
+	     
+	    $number = new Number('-2.43434');
+	    $result = $number->round(2);
+	    $this->assertEquals('-2.43', $result);
+	     
+	    $number = new Number('-2.43634');
+	    $result = $number->round(2);
+	    $this->assertEquals('-2.44', $result);
+	     
+	    $number = new Number('-2.43534');
+	    $result = $number->round(2);
+	    $this->assertEquals('-2.44', $result);
+	}
 }

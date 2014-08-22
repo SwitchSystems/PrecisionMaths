@@ -10,18 +10,25 @@ use RuntimeException;
  */
 class Number
 {
+    /**
+     * Default scale for BC MATH operation
+     *
+     * @var integer
+     */
+    const DEFAULT_SCALE = 20;
+    
+    /**
+     * Regex pattern to validate value string
+     *
+     * @var string
+     */
+    const VALID_STRING_REGEX_PATTERN = '/^\-?\d+(\.\d+)?$/';
+    
     protected static $validTypesList = [
 	    'integer',
 	    'string',
 	    'double'
     ];
-    
-    /**
-     * Default scale for BC MATH operation
-     * 
-     * @var integer
-     */
-    const DEFAULT_SCALE = 20;
     
     /**
      * @var string
@@ -59,6 +66,7 @@ class Number
      * Adds $rightOperand value to current value and retuns calculated
      * value as new instance of Number
      * 
+     * @link http://php.net/manual/en/function.bcadd.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -83,6 +91,7 @@ class Number
      * Subtracts $rightOperand value from current value and retuns calculated
      * value as new instance of Number
      *
+     * @link http://php.net/manual/en/function.bcsub.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -106,7 +115,8 @@ class Number
     /**
      * Multiplies $rightOperand value by current value and retuns calculated
      * value as new instance of Number
-     *
+     * 
+     * @link http://php.net/manual/en/function.bcmul.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -131,6 +141,7 @@ class Number
      * Divides current value by $rightOperand value and retuns calculated
      * value as new instance of Number
      *
+     * @link http://php.net/manual/en/function.bcdiv.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -155,6 +166,7 @@ class Number
      * Calculates and returns modulus
      * value as new instance of Number
      *
+     * @link http://php.net/manual/en/function.bcmul.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -179,6 +191,7 @@ class Number
      * Raises this by $rightOperand
      * value and returns as new instance of Number
      *
+     * @link http://php.net/manual/en/function.bcpow.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -203,6 +216,7 @@ class Number
      * Raise number by $rightOperand, and reduced by a $modulus
      * value and returns as new instance of Number
      *
+     * @link http://php.net/manual/en/function.bcpowmod.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -228,6 +242,7 @@ class Number
      * Returns the square root of the number as a new
      * instance of number
      *
+     * @link http://php.net/manual/en/function.bcsqrt.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -353,14 +368,15 @@ class Number
      * Rounds the number as per php round function
      * this method DOES NOT use arbitrary precision style rounding
      * but Number::precisionRound does
-     * 
+     *
+     * @see http://php.net/manual/en/function.round.php
      * @param integer $precision
      * @param unknown $type
      * @return Ambigous <\PrecisionMaths\Number, \PrecisionMaths\Number>
      */
-    public function round($precision, $type)
+    public function round($precision, $type = null)
     {
-        return self::create(round((int) $this, $precision, $type));
+        return self::create(round((string) $this, $precision, $type));
     }
     
     /**
@@ -409,7 +425,7 @@ class Number
      */
     protected function isValidString($value)
     {
-    	switch (preg_match('/^\-?\d+(\.\d+)?$/', (string) $value)) {
+    	switch (preg_match(self::VALID_STRING_REGEX_PATTERN, (string) $value)) {
     	   case 0:
     	       return false;
     	       break; 
