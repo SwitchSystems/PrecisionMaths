@@ -23,7 +23,7 @@ class Finance
     	// Doesn't check the type of $breaksInMins here as just going to let Number class validation deal with it
     	if ($breakInMins !== null) {
     	    $precisionBreakInMins = Number::create($breakInMins);
-    	    $precisionDecimalTimeBreak = $precisionBreakInMins->div(DecimalTime::MINUTES_IN_HOUR)
+    	    $precisionDecimalTimeBreak = $precisionBreakInMins->div(DecimalTime::MINUTES_IN_HOUR);
     	    $decimalHoursWorked = $decimalHoursWorked->sub($precisionDecimalTimeBreak);
     	};
 
