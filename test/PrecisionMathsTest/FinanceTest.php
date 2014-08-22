@@ -1,7 +1,7 @@
 <?php
 namespace PrecisionMathsTest;
 
-class PaymentTest
+class FinanceTest
 {
 	
 }

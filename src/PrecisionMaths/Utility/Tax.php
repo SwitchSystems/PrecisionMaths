@@ -1,5 +1,5 @@
 <?php
-namespace PrecisionMaths;
+namespace PrecisionMaths\Utility;
 
 use RuntimeException;
 
