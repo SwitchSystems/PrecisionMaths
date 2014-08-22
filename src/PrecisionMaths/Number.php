@@ -505,7 +505,7 @@ class Number
     }
     
     /**
-     * Here there be magic
+     * Here there be magic...
      * 
      * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
      * @return string

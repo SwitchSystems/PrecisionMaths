@@ -6,7 +6,6 @@ use PrecisionMaths\Number;
 
 /**
  *  Utility Class to calculate tax 
- *
  */
 class TaxUtility
 {

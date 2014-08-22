@@ -3,6 +3,10 @@ namespace PrecisionMaths;
 
 use ArrayObject;
 
+/**
+ * Class to wrap array with methods 
+ * to perform operation on self
+ */
 class NumberCollection extends ArrayObject
 {
     /**
@@ -23,6 +27,7 @@ class NumberCollection extends ArrayObject
      */
     public function __construct(array $array, $scale = null)
     {
+        // Sort the array, to ensure future methods work properly
     	sort($array);
 
         if ($scale !== null) { 
@@ -61,9 +66,16 @@ class NumberCollection extends ArrayObject
     	return Number::create(bcdiv($this->sum(), count($this), $this->scale));
     }
     
+    /**
+     * Returns the median of the collection
+     * 
+     * @return \PrecisionMaths\NumberCollection
+     */
     public function median()
     {
     	$middleIndex = Number::create(count($this))->div('2').round(0);
+    
+        return $this[$middleIndex->getValueAsInt()];
     }
     
     /**
