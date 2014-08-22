@@ -82,4 +82,22 @@ class DecimalTimeTest extends \PHPUnit_Framework_TestCase
 	    $end = new DateTime('2014-05-03 8:59:59');
 	    $this->assertEquals('8.00', $util->dateRangeAsMinutes($start, $end));
 	}
+	
+	public function testDateRangeSeconds()
+	{
+	    $util = new DecimalTime(2);
+	    $utilMorePrecise = new DecimalTime(20);
+	     
+	    $start = new DateTime('2014-05-02 9:00');
+	    $end = new DateTime('2014-05-02 17:00');
+	    $this->assertEquals('28800.00', $util->dateRangeAsSeconds($start, $end));
+
+	    $start = new DateTime('2014-05-02 9:00:00');
+	    $end = new DateTime('2014-05-02 17:00:22');
+	    $this->assertEquals('28822.00', $util->dateRangeAsSeconds($start, $end));
+	    
+	    $start = new DateTime('2014-05-01 9:00:00');
+	    $end = new DateTime('2014-05-02 17:00:22');
+	    $this->assertEquals('115222.00', $util->dateRangeAsSeconds($start, $end));
+	}
 }

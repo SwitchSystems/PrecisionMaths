@@ -48,14 +48,42 @@ class DecimalTime
      */
     protected $scale;
     
+    /**
+     * @param string $scale
+     */
     public function __construct($scale = null)
     {
+        // Don't worry about a default scale, let Number class take care of it
         $this->scale = $scale;
     }
     
+    /**
+     * Returns the decimal number of days for a given time period
+     * 
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return PrecisionMaths\Number
+     */
 	public function dateRangeAsDays(DateTime $start, DateTime $end)
 	{
-		
+	    $dateInterval = $this->calculateDateDiff($start, $end);
+	    
+	    // Calculate the days and assign to $days
+	    $days = new Number($dateInterval->h, $this->scale);
+	    
+	    // Calculate days from hours and add to $days 
+	    $daysFromHours = (new Number($dateInterval->h, $this->scale))->div(static::HOURS_IN_DAY);
+	    $days = $days->add($daysFromHours);
+	    
+	    // Calculate days from Minutes 
+	    $daysFromMinutes = (new Number($dateInterval->i, $this->scale))->div(static::MINUTES_IN_DAY);
+	    $days = $days->add($daysFromMinutes);
+	    
+	    // Calculate days from seconds and add to $days
+	    $daysFromSeconds = (new Number($dateInterval->s, $this->scale))->div(static::SECONDS_IN_DAY);
+	    $days = $days->add($daysFromSeconds);
+	    
+	    return $days;
 	}
 
 	/**
@@ -126,23 +154,47 @@ class DecimalTime
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    // Calculate the seconds from days and assign to $seconds
-	    $seconds = (new Number($dateInterval->d, $this->scale))->mul(static::SECONDS_IN_DAY);
-	    
-	    // Calculate the seconds from hours and add to $seconds
-	    $secondsFromHours = (new Number($dateInterval->h, $this->scale))->mul(static::SECONDS_IN_HOUR);
-	    $seconds = $seconds->add($secondsFromHours);
-	    
-	    // Calculate seconds from minutes and add to $seconds
-	    $secondsFromMinutes = (new Number($dateInterval->i, $this->scale))->mul(static::SECONDS_IN_MINUTE);
-	    $seconds = $seconds->add($secondsFromMinutes);
+	    $seconds = $this->convertDaysToSeconds($dateInterval->d)
+	                    ->add($this->convertMinutesToSeconds($dateInterval->i))
+	                    ->add($this->convertHoursToSeconds($dateInterval->h))
+	                    ->add($dateInterval->s);
 	
-	    // Add seconds
-	    $seconds = $seconds->add($dateInterval->s);
-	    
 	    return $seconds;
 	}
 
+	/**
+	 * Converts a decimal days value into a decimal seconds value
+	 *
+	 * @param mixed $days
+	 * @return \PrecisionMaths\Number
+	 */
+	public function convertDaysToSeconds($days)
+	{
+		return (new Number($days, $this->scale))->mul(static::SECONDS_IN_DAY);
+	}
+	
+	/**
+	 * Converts a decimal hours value into a decimal seconds value
+	 *
+	 * @param mixed $hours
+	 * @return \PrecisionMaths\Number
+	 */
+	public function convertHoursToSeconds($hours)
+	{
+		return (new Number($hours, $this->scale))->mul(static::SECONDS_IN_HOUR);
+	}
+	
+	/**
+	 * Converts a decimal minutes value into a decimal seconds value
+	 * 
+	 * @param mixed $minutes
+	 * @return \PrecisionMaths\Number
+	 */
+	public function convertMinutesToSeconds($minutes)
+	{
+		return (new Number($minutes, $this->scale))->mul(static::SECONDS_IN_MINUTE);
+	}
+	
 	/**
 	 * Calculates the date interval for the range
 	 * 
@@ -155,6 +207,7 @@ class DecimalTime
 	{
 	    $dateInterval = $start->diff($end);
 
+	    // This utility is not handling inverse time periods 
 	    if ($dateInterval->invert === 1) {
 	    	throw new BadMethodCallException('Start Date must be before end date!');
 	    }
