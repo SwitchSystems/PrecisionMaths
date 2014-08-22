@@ -21,7 +21,7 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals((string) $valueFloat, $number);
 	}
 	
-	public function testIntatiateNumberWithInvalidStringThrowsException()
+	public function testInstantiateNumberWithInvalidStringThrowsException()
 	{
 	    $this->setExpectedException('InvalidArgumentException');
 	    
@@ -32,6 +32,15 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    
 	    $value = '1IWishIWasANumber';
 	    $number = new Number($value);
+	}
+	
+	public function testCanInstantiateNumberFromAnotherNumber()
+	{
+		$number = new Number('2.5');
+		$numberTwo = new Number($number);
+		
+		$this->assertEquals($number, $numberTwo);
+		$this->assertEquals((string) $number, (string) $numberTwo);
 	}
 	
 	public function testAdditionOperation()

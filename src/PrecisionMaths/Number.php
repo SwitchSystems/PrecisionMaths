@@ -27,7 +27,8 @@ class Number
     protected static $validTypesList = [
 	    'integer',
 	    'string',
-	    'double'
+	    'double',
+	    'object'
     ];
     
     /**
