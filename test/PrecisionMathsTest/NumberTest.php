@@ -209,4 +209,11 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    
 	    $this->assertEquals('5.000000000000000000000', $result);
 	}
+	
+	public function testGetValueAsInt()
+	{
+	    $number = new Number('2.5');
+	    $this->assertEquals('integer', gettype($number->getValueAsInt()));
+	    $this->assertEquals(2, $number->getValueAsInt());
+	}
 }

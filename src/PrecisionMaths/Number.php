@@ -175,7 +175,6 @@ class Number
     public function divide($rightOperand, $scale = null)
     {
         $this->checkValueIsValid($rightOperand);
-        exit(var_dump($this->scale));
         if ($scale === null) {
             $scale = $this->scale;
         }
@@ -587,6 +586,7 @@ class Number
     
     /**
      * Returns this value as an integer
+     * This obviously is going to truncate your number if it isn't a whole number
      * 
      * @return number
      */
