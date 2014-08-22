@@ -47,6 +47,18 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertEquals("16.26153391900000000000", $result);
 	}
 
+	public function testInvalidRightOperandAdditionOperation()
+	{
+	    $this->setExpectedException('InvalidArgumentException');
+	    
+	    $valueString = '10.919191919';
+	    $rightOperandString = 'Number Two';
+	     
+	    $number = new Number($valueString);
+	    
+	    $result = $number->addition($rightOperandString);
+	}
+	
 	public function testSubtractOperation()
 	{
 	    $valueString = '10.919191919';
@@ -142,5 +154,28 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $number = new Number('-2.43534');
 	    $result = $number->round(2);
 	    $this->assertEquals('-2.44', $result);
+	}
+	
+	public function testPrecisionRound()
+	{
+	    $number = new Number('2.43434');
+	    $result = $number->precisionRound(2);
+	    $this->assertEquals('2.43', $result);
+	    
+	    $number = new Number('2.43534');
+	    $result = $number->precisionRound(2);
+	    $this->assertEquals('2.43', $result);
+	    
+
+	    $number = new Number('2.4353465465465');
+	    $result = $number->precisionRound(12);
+	    $this->assertEquals('2.435346546546', $result);
+	}
+	
+	public function testPrecisionRoundWorksWithStringForPrecision()
+	{
+    	$number = new Number('2.4353465465465');
+    	$result = $number->precisionRound('1');
+    	$this->assertEquals('2.4', $result);
 	}
 }

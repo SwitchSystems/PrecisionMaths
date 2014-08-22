@@ -49,14 +49,12 @@ class Number
      */
     public function __construct($value, $scale = null)
     {
-        if ((! $this->isValidType($value)) || (! $this->isValidString($value))) {
-            throw new InvalidArgumentException(sprintf('The value %s provided is not valid', $value));
-        }
+        $this->checkValueIsValid($value);
         
-        if ($scale !== null) { 
-            $this->scale = (int) $scale;
+        if ($scale === null) { 
+            $this->scale = self::DEFAULT_SCALE;
         } else {
-            $this->scale = self::DEFAULT_SCALE;	
+            $this->scale = (int) $scale;
         }
         
         $this->value = (string) $value;
@@ -68,11 +66,18 @@ class Number
      * 
      * @link http://php.net/manual/en/function.bcadd.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function addition($rightOperand)
+    public function addition($rightOperand, $scale = null)
     {
-        return self::create(bcadd($this, $rightOperand, $this->scale));
+        $this->checkValueIsValid($rightOperand);
+        
+        if ($scale === null) {
+        	$scale = $this->scale;
+        }
+        
+        return self::create(bcadd($this, $rightOperand, $scale));
     }
     
     /**
@@ -80,11 +85,12 @@ class Number
      * 
      * @see self::addition()
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function add($rightOperand)
+    public function add($rightOperand, $scale = null)
     {
-        return $this->addition($rightOperand);
+        return $this->addition($rightOperand, $scale);
     }
     
     /**
@@ -93,11 +99,18 @@ class Number
      *
      * @link http://php.net/manual/en/function.bcsub.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function subtract($rightOperand)
+    public function subtract($rightOperand, $scale = null)
     {
-        return self::create(bcsub($this, $rightOperand, $this->scale));
+        $this->checkValueIsValid($rightOperand);
+        
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return self::create(bcsub($this, $rightOperand, $scale));
     }
     
     /**
@@ -105,11 +118,12 @@ class Number
      *
      * @see self::subtract()
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function sub($rightOperand)
+    public function sub($rightOperand, $scale = null)
     {
-        return $this->subtract($rightOperand);
+        return $this->subtract($rightOperand, $scale);
     }
     
     /**
@@ -118,11 +132,18 @@ class Number
      * 
      * @link http://php.net/manual/en/function.bcmul.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function multiply($rightOperand)
+    public function multiply($rightOperand, $scale = null)
     {
-        return self::create(bcmul($this, $rightOperand, $this->scale));
+        $this->checkValueIsValid($rightOperand);
+        
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return self::create(bcmul($this, $rightOperand, $scale));
     }
     
     /**
@@ -130,11 +151,12 @@ class Number
      *
      * @see self::multiply()
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function mul($rightOperand)
+    public function mul($rightOperand, $scale = null)
     {
-        return $this->multiply($rightOperand);
+        return $this->multiply($rightOperand, $scale);
     }
     
     /**
@@ -143,11 +165,18 @@ class Number
      *
      * @link http://php.net/manual/en/function.bcdiv.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function divide($rightOperand)
+    public function divide($rightOperand, $scale = null)
     {
-        return self::create(bcdiv($this, $rightOperand, $this->scale));
+        $this->checkValueIsValid($rightOperand);
+        
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return self::create(bcdiv($this, $rightOperand, $scale));
     }
     
     /**
@@ -155,11 +184,12 @@ class Number
      *
      * @see self::divide()
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function div($rightOperand)
+    public function div($rightOperand, $scale = null)
     {
-        return $this->divide($rightOperand);
+        return $this->divide($rightOperand, $scale);
     }
 
     /**
@@ -172,7 +202,9 @@ class Number
      */
     public function modulus($modulus)
     {
-        return self::create(bcmod($this, $modulus, $this->scale));
+        $this->checkValueIsValid($modulus);
+        
+        return self::create(bcmod($this, $modulus));
     }
     
     /**
@@ -193,11 +225,18 @@ class Number
      *
      * @link http://php.net/manual/en/function.bcpow.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function power($rightOperand)
+    public function power($rightOperand, $scale = null)
     {
-        return self::create(bcpow($this, $rightOperand, $this->scale));
+        $this->checkValueIsValid($rightOperand);
+        
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return self::create(bcpow($this, $rightOperand, $scale));
     }
     
     /**
@@ -205,11 +244,12 @@ class Number
      *
      * @see self::power()
      * @param mixed $power
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function pow($rightOperand)
+    public function pow($rightOperand, $scale = null)
     {
-        return $this->modulus($rightOperand);
+        return $this->modulus($rightOperand, $scale);
     }
     
     /**
@@ -218,11 +258,19 @@ class Number
      *
      * @link http://php.net/manual/en/function.bcpowmod.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function powerModulus($rightOperand, $modulus)
+    public function powerModulus($rightOperand, $modulus, $scale = null)
     {
-        return self::create(bcpowmod($this, $rightOperand, $modulus, $this->scale));
+        $this->checkValueIsValid($rightOperand);
+        $this->checkValueIsValid($modulus);
+        
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return self::create(bcpowmod($this, $rightOperand, $modulus, $scale));
     }
     
     /**
@@ -231,11 +279,12 @@ class Number
      * @see self::powerModulus()
      * @param mixed $rightOperand
      * @param mixed $modulus
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function powmod($rightOperand, $modulus)
+    public function powmod($rightOperand, $modulus, $scale = null)
     {
-        return $this->powermodulus($rightOperand, $modulus);
+        return $this->powermodulus($rightOperand, $modulus, $scale);
     }
     
     /**
@@ -244,20 +293,26 @@ class Number
      *
      * @link http://php.net/manual/en/function.bcsqrt.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function sqaureroot()
+    public function sqaureroot($scale = null)
     {
-        return self::create(bcsqrt($this, $this->scale));
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return self::create(bcsqrt($this, $scale));
     }
     
     /**
      * Alias for squareroot
      *
      * @see self::squareroot()
+     * @param integer $scale
      * @return \PrecisionMaths\PrecisionMaths\Number
      */
-    public function sqrt()
+    public function sqrt($scale = null)
     {
         return $this->sqaureroot();
     }
@@ -268,10 +323,13 @@ class Number
      * 
      * @link http://php.net/manual/en/function.bccomp.php
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function compare($rightOperand)
+    public function compare($rightOperand, $scale = null)
     {
+        $this->checkValueIsValid($rightOperand);
+        
         return bccomp($this, $rightOperand, $this->scale);
     }
     
@@ -280,10 +338,13 @@ class Number
      * the value provided to $rightOperand Arg
      *
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return Boolean
      */
-    public function lessThan($rightOperand)
+    public function lessThan($rightOperand, $scale = null)
     {
+        $this->checkValueIsValid($rightOperand);
+        
     	if (bccomp($this, $rightOperand, $this->scale) === -1) {
     		return true;
     	} else {
@@ -296,9 +357,10 @@ class Number
      *
      * @see self::lessThan()
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return Boolean
      */
-    public function lt($rightOperand)
+    public function lt($rightOperand, $scale = null)
     {
     	return $this->lessThan($rightOperand);
     }
@@ -308,10 +370,13 @@ class Number
      * the value provided to $rightOperand Arg
      *
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return Boolean
      */
-    public function greaterThan($rightOperand)
+    public function greaterThan($rightOperand, $scale = null)
     {
+        $this->checkValueIsValid($rightOperand);
+        
         if (bccomp($this, $rightOperand, $this->scale) === 1) {
             return true;
         } else {
@@ -324,9 +389,10 @@ class Number
      *
      * @see self::greaterThan()
      * @param mixed $rightOperand
+     * @param integer $scale
      * @return Boolean
      */
-    public function gt($rightOperand)
+    public function gt($rightOperand, $scale = null)
     {
         return $this->greaterThan($rightOperand);
     }
@@ -435,6 +501,17 @@ class Number
     	   default:
     	       throw new RuntimeException(sprintf('Number::isValid() - Sorry an error occured whilst trying to validate %s', $value));
     	}
+    }
+    
+    /**
+     * @param mixed $value
+     * @throws InvalidArgumentException
+     */
+    protected function checkValueIsValid($value)
+    {
+        if ((! $this->isValidType($value)) || (! $this->isValidString($value))) {
+            throw new InvalidArgumentException(sprintf('The value %s provided is not valid', $value));
+        }
     }
     
     /**
