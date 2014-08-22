@@ -584,4 +584,14 @@ class Number
     {
     	return $this->scale;
     }
+    
+    /**
+     * Returns this value as an integer
+     * 
+     * @return number
+     */
+    public function getValueAsInt()
+    {
+        return (int) $this->value;	
+    }
 }

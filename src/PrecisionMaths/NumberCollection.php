@@ -66,6 +66,11 @@ class NumberCollection extends ArrayObject
     	$middleIndex = Number::create(count($this))->div('2').round(0);
     }
     
+    /**
+     * Returns the range for the number collection
+     * 
+     * @return PrecisionMaths\Number
+     */
     public function range()
     {
     	$firstElement = Number::create(reset($this));
@@ -74,11 +79,16 @@ class NumberCollection extends ArrayObject
     	return Number::create($lastElement->sub($firstElement));
     } 
     
+    /**
+     * Returns the value of the lower quartile for this collection
+     *
+     * @return \PrecisionMaths\NumberCollection
+     */
     public function lowerQuartile()
     {
         $count = new Number(count($this));
-    	$position =  $count->add('1')->mul('0.25')->floor()->sub('1');
-    	
-    	return $this[$position];
+    	$position =  $count->sub('1')->mul('0.25')->floor()->add('1');
+
+    	return $this[$position->getValueAsInt()];
     }
 }

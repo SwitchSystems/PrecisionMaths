@@ -68,4 +68,13 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $result = $numberCollection->range();
 	    $this->assertEquals('6.00', $result);
 	}
+	
+	public function testLowerQuartile()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array, 2);
+	    
+	    $result = $numberCollection->lowerQuartile();
+	    $this->assertEquals('2.00', $result);
+	}
 }
