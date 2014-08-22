@@ -11,7 +11,7 @@ use BadMethodCallException;
  * @TODO: Implement Month and Year - currently these will just be ignored!
  * as we don't need this functionality as of yet
  */
-class DecimalTime
+class DecimalTimeUtility
 {
     /**
      * @var string
