@@ -72,6 +72,18 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertEquals("5.576849919000000000",  $result);
 	}
 	
+	public function testInvalidRightOperandMultiplyOperation()
+	{
+	    $this->setExpectedException('InvalidArgumentException');
+	     
+	    $valueString = '10.919191919';
+	    $rightOperandString = 'Number Two';
+	
+	    $number = new Number($valueString);
+	     
+	    $result = $number->multiply($rightOperandString);
+	}
+	
 	public function testMultiplyOperation()
 	{
 	    $valueString = '10.919191919';
