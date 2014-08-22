@@ -5,8 +5,6 @@ use ArrayObject;
 
 class NumberCollection extends ArrayObject
 {
-    use \PrecisionMaths\InitialiseNumberTrait;
-    
     /**
      * Default scale for BC MATH operation
      * 
@@ -45,7 +43,7 @@ class NumberCollection extends ArrayObject
     	    $result = bcadd($result, $value);
     	}
     	
-    	return $this->initialiseNumber($result);
+    	return Number::create($result);
     }
     
     /**
@@ -56,19 +54,19 @@ class NumberCollection extends ArrayObject
      */
     public function mean()
     {
-    	return $this->initialiseNumber(bcdiv($this->sum(), count($this)));
+    	return Number::create(bcdiv($this->sum(), count($this)));
     }
     
     public function median()
     {
-    	$middleIndex = $this->initialiseNumber(count($this))->div('2').round(0);
+    	$middleIndex = Number::create(count($this))->div('2').round(0);
     }
     
     public function range()
     {
-    	$firstElement = $this->initialiseNumber(end($this));
-    	$lastElement = $this->initialiseNumber(reset($this));
+    	$firstElement = Number::create(end($this));
+    	$lastElement = Number::create(reset($this));
     	
-    	return $this->initialiseNumber($lastElement->sub($firstElement));
+    	return Number::create($lastElement->sub($firstElement));
     } 
 }

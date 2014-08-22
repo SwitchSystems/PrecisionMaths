@@ -5,8 +5,6 @@ use RuntimeException;
 
 class Tax
 {
-    use \PrecisionMaths\InitialiseNumberTrait;
-    
     /**
      * Current Tax Rate
      * @var float
@@ -20,7 +18,7 @@ class Tax
     
 	public function calculateTax($value)
 	{
-		$numberObj = $this->initialiseNumber($value);
+		$numberObj = Number::create($value);
 
 		return $this->taxRate->div('100')->mul($numberObj);
 	}
@@ -33,7 +31,7 @@ class Tax
 	 */
 	public function addTaxTo($value)
 	{
-	    $numberObj = $this->initialiseNumber($value);
+	    $numberObj = Number::create($value);
 	
 	    $tax = $this->taxRate->div('100')->mul($numberObj);
 	    
@@ -48,7 +46,7 @@ class Tax
 	 */
 	public function removeTaxFrom($value)
 	{
-	    $numberObj = $this->initialiseNumber($value);
+	    $numberObj = Number::create($value);
 	    $onePercentOfValue = $numberObj->div($this->taxRate->add('100'));
 	    
 	    return $onePercentOfValue->mul('100');

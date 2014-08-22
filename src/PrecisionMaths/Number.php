@@ -4,9 +4,17 @@ namespace PrecisionMaths;
 use InvalidArgumentException;
 use RuntimeException;
 
+/**
+ * Immutable Number which wraps the basic operations of BC MATH
+ * and provideds some additional operations
+ */
 class Number
 {
-    use \PrecisionMaths\InitialiseNumberTrait;
+    protected static $validTypesList = [
+	    'integer',
+	    'string',
+	    'double'
+    ];
     
     /**
      * Default scale for BC MATH operation
@@ -34,10 +42,8 @@ class Number
      */
     public function __construct($value, $scale = null)
     {
-        $stringValue = (string) $value;
-        
-        if (! $this->isValid($stringValue)) {
-            throw new InvalidArgumentException(sprintf('The value %s provided is not valid', $stringValue));
+        if ((! $this->isValidType($value)) || (! $this->isValidString($value))) {
+            throw new InvalidArgumentException(sprintf('The value %s provided is not valid', $value));
         }
         
         if ($scale !== null) { 
@@ -46,7 +52,7 @@ class Number
             $this->scale = self::DEFAULT_SCALE;	
         }
         
-        $this->value = $stringValue;
+        $this->value = (string) $value;
     }
 
     /**
@@ -58,7 +64,7 @@ class Number
      */
     public function addition($rightOperand)
     {
-        return $this->initialiseNumber(bcadd($this, $rightOperand, $this->scale));
+        return self::create(bcadd($this, $rightOperand, $this->scale));
     }
     
     /**
@@ -82,7 +88,7 @@ class Number
      */
     public function subtract($rightOperand)
     {
-        return $this->initialiseNumber(bcsub($this, $rightOperand, $this->scale));
+        return self::create(bcsub($this, $rightOperand, $this->scale));
     }
     
     /**
@@ -106,7 +112,7 @@ class Number
      */
     public function multiply($rightOperand)
     {
-        return $this->initialiseNumber(bcmul($this, $rightOperand, $this->scale));
+        return self::create(bcmul($this, $rightOperand, $this->scale));
     }
     
     /**
@@ -130,7 +136,7 @@ class Number
      */
     public function divide($rightOperand)
     {
-        return $this->initialiseNumber(bcdiv($this, $rightOperand, $this->scale));
+        return self::create(bcdiv($this, $rightOperand, $this->scale));
     }
     
     /**
@@ -154,7 +160,7 @@ class Number
      */
     public function modulus($modulus)
     {
-        return $this->initialiseNumber(bcmod($this, $modulus, $this->scale));
+        return self::create(bcmod($this, $modulus, $this->scale));
     }
     
     /**
@@ -169,41 +175,98 @@ class Number
         return $this->modulus($modulus);
     }
     
+    /**
+     * Raises this by $rightOperand
+     * value and returns as new instance of Number
+     *
+     * @param mixed $rightOperand
+     * @return PrecisionMaths\Number
+     */
     public function power($rightOperand)
     {
-        return $this->initialiseNumber(bcpow($this, $rightOperand, $this->scale));
+        return self::create(bcpow($this, $rightOperand, $this->scale));
     }
     
+    /**
+     * Alias for power
+     *
+     * @see self::power()
+     * @param mixed $power
+     * @return \PrecisionMaths\PrecisionMaths\Number
+     */
     public function pow($rightOperand)
     {
         return $this->modulus($rightOperand);
     }
     
+    /**
+     * Raise number by $rightOperand, and reduced by a $modulus
+     * value and returns as new instance of Number
+     *
+     * @param mixed $rightOperand
+     * @return PrecisionMaths\Number
+     */
     public function powerModulus($rightOperand, $modulus)
     {
-        return $this->initialiseNumber(bcpowmod($this, $rightOperand, $modulus, $this->scale));
+        return self::create(bcpowmod($this, $rightOperand, $modulus, $this->scale));
     }
     
+    /**
+     * Alias for powerModulus
+     *
+     * @see self::powerModulus()
+     * @param mixed $rightOperand
+     * @param mixed $modulus
+     * @return \PrecisionMaths\PrecisionMaths\Number
+     */
     public function powmod($rightOperand, $modulus)
     {
         return $this->powermodulus($rightOperand, $modulus);
     }
     
+    /**
+     * Returns the square root of the number as a new
+     * instance of number
+     *
+     * @param mixed $rightOperand
+     * @return PrecisionMaths\Number
+     */
     public function sqaureroot()
     {
-        return $this->initialiseNumber(bcsqrt($this, $this->scale));
+        return self::create(bcsqrt($this, $this->scale));
     }
     
+    /**
+     * Alias for squareroot
+     *
+     * @see self::squareroot()
+     * @return \PrecisionMaths\PrecisionMaths\Number
+     */
     public function sqrt()
     {
         return $this->sqaureroot();
     }
     
+    /**
+     * Compares this by $right operand
+     * Returns 0 if the two operands are equal, 1 if the left_operand is larger than the right_operand, -1 otherwise.
+     * 
+     * @link http://php.net/manual/en/function.bccomp.php
+     * @param mixed $rightOperand
+     * @return PrecisionMaths\Number
+     */
     public function compare($rightOperand)
     {
         return bccomp($this, $rightOperand, $this->scale);
     }
     
+    /**
+     * Returns true if this number is less than 
+     * the value provided to $rightOperand Arg
+     *
+     * @param mixed $rightOperand
+     * @return Boolean
+     */
     public function lessThan($rightOperand)
     {
     	if (bccomp($this, $rightOperand, $this->scale) === -1) {
@@ -213,6 +276,13 @@ class Number
         }
     }
     
+    /**
+     * Alias for lessThan
+     *
+     * @see self::lessThan()
+     * @param mixed $rightOperand
+     * @return Boolean
+     */
     public function lt($rightOperand)
     {
     	return $this->lessThan($rightOperand);
@@ -234,13 +304,13 @@ class Number
     
     public function floor()
     {
-        $result = $this->initialiseNumber(bcmul($this, '1', 0));
+        $result = self::create(bcmul($this, '1', 0));
         
         if ($this->isNegative()) {
             $result = $result->sub('1', 0);
         }
         
-        return $this->initialiseNumber($result, 0);
+        return self::create($result, 0);
     }
     
     public function ceil()
@@ -248,18 +318,24 @@ class Number
         if ($this->isNegative()) {
             $result = bcmul($this, '1', 0);
             
-            return $this->initialiseNumber($result, 0);
+            return self::create($result, 0);
         } else {
             $floor = $this->floor();
-            return $this->initialiseNumber($floor->add('1', 0));
+            return self::create($floor->add('1', 0));
         }
     }
     
     public function round($precision, $type)
     {
-        return $this->initialiseNumber(round((int) $this, $precision, $type));
+        return self::create(round((int) $this, $precision, $type));
     }
     
+    /**
+     * Returns true if this is a negative number
+     * otherwise returns false
+     * 
+     * @return boolean
+     */
     public function isNegative()
     {
     	if (substr($this, 0, 1) === '-') {
@@ -284,9 +360,9 @@ class Number
      *
      * @return bool
      */
-    protected function isValid($value)
+    protected function isValidString($value)
     {
-    	switch (preg_match('/^\-?\d+(\.\d+)?$/', $value)) {
+    	switch (preg_match('/^\-?\d+(\.\d+)?$/', (string) $value)) {
     	   case 0:
     	       return false;
     	       break; 
@@ -296,5 +372,33 @@ class Number
     	   default:
     	       throw new RuntimeException(sprintf('Number::isValid() - Sorry an error occured whilst trying to validate %s', $value));
     	}
+    }
+    
+    /**
+     * Checks type of $value and returns true if is otherwise throws exception
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    protected function isValidType($value)
+    {
+        if (in_array(gettype($value), static::$validTypesList)) {
+            return true;
+        } elseif ($value instanceof Number) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    /**
+     * Factory method to create a new instance 
+     * 
+     * @param mixed $value
+     * @return \PrecisionMaths\Number
+     */
+    public static function create($value)
+    {
+    	return new static($value);
     }
 }
