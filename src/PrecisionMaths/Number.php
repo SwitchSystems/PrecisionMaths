@@ -175,7 +175,7 @@ class Number
     public function divide($rightOperand, $scale = null)
     {
         $this->checkValueIsValid($rightOperand);
-        
+        exit(var_dump($this->scale));
         if ($scale === null) {
             $scale = $this->scale;
         }

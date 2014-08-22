@@ -44,7 +44,7 @@ class NumberCollection extends ArrayObject
     	$result = '0';
     	
     	foreach ($this as $value) {
-    	    $result = bcadd($result, $value);
+    	    $result = bcadd($result, $value, $this->scale);
     	}
     	
     	return Number::create($result);
@@ -58,7 +58,7 @@ class NumberCollection extends ArrayObject
      */
     public function mean()
     {
-    	return Number::create(bcdiv($this->sum(), count($this)));
+    	return Number::create(bcdiv($this->sum(), count($this), $this->scale));
     }
     
     public function median()
@@ -68,9 +68,17 @@ class NumberCollection extends ArrayObject
     
     public function range()
     {
-    	$firstElement = Number::create(end($this));
-    	$lastElement = Number::create(reset($this));
+    	$firstElement = Number::create(reset($this));
+    	$lastElement = Number::create(end($this));
     	
     	return Number::create($lastElement->sub($firstElement));
     } 
+    
+    public function lowerQuartile()
+    {
+        $count = new Number(count($this));
+    	$position =  $count->add('1')->mul('0.25')->floor()->sub('1');
+    	
+    	return $this[$position];
+    }
 }
