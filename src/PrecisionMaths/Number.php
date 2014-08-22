@@ -288,6 +288,13 @@ class Number
     	return $this->lessThan($rightOperand);
     }
     
+    /**
+     * Returns true if this number is greater than
+     * the value provided to $rightOperand Arg
+     *
+     * @param mixed $rightOperand
+     * @return Boolean
+     */
     public function greaterThan($rightOperand)
     {
         if (bccomp($this, $rightOperand, $this->scale) === 1) {
@@ -297,11 +304,23 @@ class Number
         }
     }
     
+    /**
+     * Alias for greaterThan
+     *
+     * @see self::greaterThan()
+     * @param mixed $rightOperand
+     * @return Boolean
+     */
     public function gt($rightOperand)
     {
         return $this->greaterThan($rightOperand);
     }
     
+    /**
+     * Floors the number and returns as a new instance of Number
+     * 
+     * @return \PrecisionMaths\Number
+     */
     public function floor()
     {
         $result = self::create(bcmul($this, '1', 0));
@@ -313,6 +332,11 @@ class Number
         return self::create($result, 0);
     }
     
+    /**
+     * Ceils the number and returns as a new instance of Number
+     *
+     * @return \PrecisionMaths\Number
+     */
     public function ceil()
     {
         if ($this->isNegative()) {
@@ -325,9 +349,29 @@ class Number
         }
     }
     
+    /**
+     * Rounds the number as per php round function
+     * this method DOES NOT use arbitrary precision style rounding
+     * but Number::precisionRound does
+     * 
+     * @param integer $precision
+     * @param unknown $type
+     * @return Ambigous <\PrecisionMaths\Number, \PrecisionMaths\Number>
+     */
     public function round($precision, $type)
     {
         return self::create(round((int) $this, $precision, $type));
+    }
+    
+    /**
+     * Chops the end of after precision significant figure has been reached
+     * 
+     * @param integer $precision
+     * @return PrecisionMaths\Number
+     */
+    public function precisionRound($precision)
+    {
+    	return self::create($this->mul('1', $precision));
     }
     
     /**
@@ -346,6 +390,9 @@ class Number
     }
     
     /**
+     * Here there be magic
+     * 
+     * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
      * @return string
      */
 	public function __toString() 
