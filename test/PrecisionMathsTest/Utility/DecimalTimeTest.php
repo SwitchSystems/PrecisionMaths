@@ -100,4 +100,18 @@ class DecimalTimeTest extends \PHPUnit_Framework_TestCase
 	    $end = new DateTime('2014-05-02 17:00:22');
 	    $this->assertEquals('115222.00', $util->dateRangeAsSeconds($start, $end));
 	}
+	
+	public function testDateRangeDays()
+	{
+	    $util = new DecimalTime(2);
+	    
+	    $start = new DateTime('2014-05-02 9:00');
+	    $end = new DateTime('2014-05-03 9:00');
+	    $this->assertEquals('1.00', $util->dateRangeAsDays($start, $end));
+	    
+
+	    $start = new DateTime('2014-05-01 9:00:00');
+	    $end = new DateTime('2014-05-02 17:00:00');
+	    $this->assertEquals('1.33', $util->dateRangeAsDays($start, $end));
+	}
 }

@@ -68,24 +68,48 @@ class DecimalTime
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    // Calculate the days and assign to $days
-	    $days = new Number($dateInterval->h, $this->scale);
+	    $days = new Number($dateInterval->d, $this->scale);
 	    
-	    // Calculate days from hours and add to $days 
-	    $daysFromHours = (new Number($dateInterval->h, $this->scale))->div(static::HOURS_IN_DAY);
-	    $days = $days->add($daysFromHours);
-	    
-	    // Calculate days from Minutes 
-	    $daysFromMinutes = (new Number($dateInterval->i, $this->scale))->div(static::MINUTES_IN_DAY);
-	    $days = $days->add($daysFromMinutes);
-	    
-	    // Calculate days from seconds and add to $days
-	    $daysFromSeconds = (new Number($dateInterval->s, $this->scale))->div(static::SECONDS_IN_DAY);
-	    $days = $days->add($daysFromSeconds);
+	    $days = $days->add($this->convertHoursToDays($dateInterval->h))
+	                 ->add($this->convertMinutesToDays($dateInterval->i))
+	                 ->add($this->convertSecondsToDays($dateInterval->s));
 	    
 	    return $days;
 	}
 
+	/**
+	 * Converts decimal hours into decimal days
+	 *
+	 * @param mixed $hours
+	 * @return PrecisionMaths\Number
+	 */
+	public function convertHoursToDays($hours)
+	{
+		return (new Number($hours, $this->scale))->div(static::HOURS_IN_DAY);
+	}
+	
+	/**
+	 * Converts decimal minutes into decimal days
+	 *
+	 * @param mixed $minutes
+	 * @return PrecisionMaths\Number
+	 */
+	public function convertMinutesToDays($minutes)
+	{
+		return (new Number($minutes, $this->scale))->div(static::MINUTES_IN_DAY);
+	}
+	
+	/**
+	 * Converts decimal seconds into decimal days
+	 *
+	 * @param mixed $seconds
+	 * @return PrecisionMaths\Number
+	 */
+	public function convertSecondsToDays($seconds)
+	{
+		return (new Number($seconds, $this->scale))->div(static::SECONDS_IN_DAY);
+	}
+	
 	/**
 	 * Returns decimal hours based on DateInterval d, h, i and s properties
 	 * 
