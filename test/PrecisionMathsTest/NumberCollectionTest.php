@@ -4,7 +4,7 @@ namespace PrecisionMathsTest;
 use PrecisionMaths\Number;
 use PrecisionMaths\NumberCollection;
 
-class NumberTest extends \PHPUnit_Framework_TestCase
+class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 {
 	public function testSum()
 	{
@@ -76,5 +76,11 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    
 	    $result = $numberCollection->lowerQuartile();
 	    $this->assertEquals('2.00', $result);
+	    
+	    $array = ['2.131', '3.131', '4.131', '5.131'];
+	    $numberCollection = new NumberCollection($array, 2);
+	     
+	    $result = $numberCollection->lowerQuartile();
+	    $this->assertEquals('3.131', $result);
 	}
 }

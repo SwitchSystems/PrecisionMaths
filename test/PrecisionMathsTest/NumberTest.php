@@ -216,4 +216,17 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertEquals('integer', gettype($number->getValueAsInt()));
 	    $this->assertEquals(2, $number->getValueAsInt());
 	}
+	
+	public function testIsWholeNumber()
+	{
+	    $wholeNumber = new Number('2', 4);
+        $this->assertTrue($wholeNumber->isWholeNumber());    
+	    
+        $wholeNumberWithDecimalPoint = new Number('2.000', 4);
+        $this->assertTrue($wholeNumberWithDecimalPoint->isWholeNumber());
+         
+        $fractionalNumber = new Number('2.454', 4);
+        $this->assertFalse($fractionalNumber->isWholeNumber());
+         
+	}
 }

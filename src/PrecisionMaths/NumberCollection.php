@@ -99,8 +99,17 @@ class NumberCollection extends ArrayObject
     public function lowerQuartile()
     {
         $count = new Number(count($this));
-    	$position =  $count->sub('1')->mul('0.25')->floor()->add('1');
-
-    	return $this[$position->getValueAsInt()];
+    	$q1Pos =  $count->add('1')->mul('0.25');
+    	
+    	if ($q1Pos->isWholeNumber() === true) {
+    	    $q1 = $this[$q1Pos->getValueAsInt()];
+    	} else {
+    		$q1Ceil = $this[$q1Pos->ceil()->getValueAsInt()];
+    		$q1Floor = $this[$q1Pos->floor()->getValueAsInt()];
+    	
+    		$q1 = $q1Ceil->add($q1Floor)->mul('2');
+    	}
+    	
+    	return $q1;
     }
 }

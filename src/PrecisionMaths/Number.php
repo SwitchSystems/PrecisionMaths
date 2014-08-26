@@ -594,4 +594,27 @@ class Number
     {
         return (int) $this->value;	
     }
+    
+    /**
+     * Checks if value is a whole number
+     * 
+     * @return boolean
+     */
+    public function isWholeNumber()
+    {
+        $decimalPointPosition = strpos($this, '.');
+
+        if ($decimalPointPosition !== false) {
+            $mantissa = substr($this, $decimalPointPosition + 1);
+
+            if (preg_match('/[^0]/', $mantissa) == true) {
+            	return false;
+            } elseif (preg_match('/[^0]/', $mantissa) == false) {
+            	return true;
+            }
+            
+        } else {
+        	return true;
+        }
+    }
 }
