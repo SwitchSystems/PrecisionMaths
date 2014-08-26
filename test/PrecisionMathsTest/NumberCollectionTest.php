@@ -77,4 +77,22 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $result = $numberCollection->lowerQuartile();
 	    $this->assertEquals('1.50000000000000000000', $result);
 	}
+	
+	public function testUpperQuartile()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	     
+	    $result = $numberCollection->upperQuartile();
+	    $this->assertEquals('6.50000000000000000000', $result);
+	}
+
+	public function testVariance()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	    
+        $this->assertEquals("6.70000000000000000000", $numberCollection->variance());
+        $this->assertEquals("5.36000000000000000000", $numberCollection->populationVariance());
+	}
 }

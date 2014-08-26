@@ -50,9 +50,13 @@ class Number
      */
     public function __construct($value, $scale = null)
     {
+        if (! extension_loaded('bcmath')) {
+            throw new RuntimeException('BC MATH extension is not loaded');
+        }
+        
         $this->checkValueIsValid($value);
         
-        if ($scale === null) { 
+        if ($scale === null) {
             $this->scale = self::DEFAULT_SCALE;
         } else {
             $this->scale = (int) $scale;
@@ -151,7 +155,7 @@ class Number
     }
     
     /**
-     * Alias for subtract
+     * Alias for multiply
      *
      * @see self::multiply()
      * @param mixed $rightOperand
@@ -200,7 +204,7 @@ class Number
      * Calculates and returns modulus
      * value as new instance of Number
      *
-     * @link http://php.net/manual/en/function.bcmul.php
+     * @link http://php.net/manual/en/function.bcmod.php
      * @param mixed $rightOperand
      * @return PrecisionMaths\Number
      */
@@ -239,8 +243,9 @@ class Number
         if ($scale === null) {
             $scale = $this->scale;
         }
-
+        
         $result = bcpow($this, $rightOperand, $scale);
+
         return self::create($result, $scale);
     }
     
@@ -254,7 +259,7 @@ class Number
      */
     public function pow($rightOperand, $scale = null)
     {
-        return $this->modulus($rightOperand, $scale);
+        return $this->power($rightOperand, $scale);
     }
     
     /**
@@ -302,7 +307,7 @@ class Number
      * @param integer $scale
      * @return PrecisionMaths\Number
      */
-    public function sqaureroot($scale = null)
+    public function squareroot($scale = null)
     {
         if ($scale === null) {
             $scale = $this->scale;
@@ -321,7 +326,7 @@ class Number
      */
     public function sqrt($scale = null)
     {
-        return $this->sqaureroot($scale);
+        return $this->squareroot($scale);
     }
     
     /**
@@ -331,7 +336,8 @@ class Number
      * @link http://php.net/manual/en/function.bccomp.php
      * @param mixed $rightOperand
      * @param integer $scale
-     * @return PrecisionMaths\Number
+     * 
+     * @return integer
      */
     public function compare($rightOperand, $scale = null)
     {
@@ -350,7 +356,8 @@ class Number
      * @see self::compare()
      * @param mixed $rightOperand
      * @param integer $scale
-     * @return Boolean
+     * 
+     * @return integer
      */
     public function comp($rightOperand, $scale = null)
     {
@@ -472,7 +479,7 @@ class Number
      * @param unknown $type
      * @return Ambigous <\PrecisionMaths\Number, \PrecisionMaths\Number>
      */
-    public function round($precision, $type = null)
+    public function impreciseRound($precision, $type = null)
     {
         return self::create(round((string) $this, $precision, $type));
     }
@@ -483,7 +490,7 @@ class Number
      * @param integer $precision
      * @return PrecisionMaths\Number
      */
-    public function precisionRound($precision)
+    public function round($precision)
     {
     	return self::create($this->mul('1', $precision));
     }
@@ -596,6 +603,17 @@ class Number
     }
     
     /**
+     * Returns this value as an integer
+     * This obviously is going to truncate your number if it isn't a whole number
+     *
+     * @return number
+     */
+    public function getValueAsFloat($precision = self::DEFAULT_SCALE)
+    {
+        return (float) $this->impreciseRound($precision);
+    }
+    
+    /**
      * Checks if value is a whole number
      * 
      * @return boolean
@@ -607,10 +625,12 @@ class Number
         if ($decimalPointPosition !== false) {
             $mantissa = substr($this, $decimalPointPosition + 1);
 
-            if (preg_match('/[^0]/', $mantissa) == true) {
+            if (preg_match('/[^0]/', $mantissa) === 1) {
             	return false;
-            } elseif (preg_match('/[^0]/', $mantissa) == false) {
+            } elseif (preg_match('/[^0]/', $mantissa) === 0) {
             	return true;
+            } else {
+            	throw new InvalidArgumentException('There was an error checking if whole number');
             }
             
         } else {

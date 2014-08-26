@@ -150,53 +150,53 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertFalse($positiveNumber->isNegative());
 	}
 	
+	public function tesIimpreciseRound()
+	{
+	    $number = new Number('2.43434');
+	    $result = $number->impreciseRound(2);
+	    $this->assertEquals('2.43', $result);
+	    
+	    $number = new Number('2.43634');
+	    $result = $number->impreciseRound(2);
+	    $this->assertEquals('2.44', $result);
+	    
+	    $number = new Number('2.43534');
+	    $result = $number->impreciseRound(2);
+	    $this->assertEquals('2.44', $result);
+	     
+	    $number = new Number('-2.43434');
+	    $result = $number->impreciseRound(2);
+	    $this->assertEquals('-2.43', $result);
+	     
+	    $number = new Number('-2.43634');
+	    $result = $number->impreciseRound(2);
+	    $this->assertEquals('-2.44', $result);
+	     
+	    $number = new Number('-2.43534');
+	    $result = $number->impreciseRound(2);
+	    $this->assertEquals('-2.44', $result);
+	}
+	
 	public function testRound()
 	{
 	    $number = new Number('2.43434');
 	    $result = $number->round(2);
 	    $this->assertEquals('2.43', $result);
 	    
-	    $number = new Number('2.43634');
-	    $result = $number->round(2);
-	    $this->assertEquals('2.44', $result);
-	    
 	    $number = new Number('2.43534');
 	    $result = $number->round(2);
-	    $this->assertEquals('2.44', $result);
-	     
-	    $number = new Number('-2.43434');
-	    $result = $number->round(2);
-	    $this->assertEquals('-2.43', $result);
-	     
-	    $number = new Number('-2.43634');
-	    $result = $number->round(2);
-	    $this->assertEquals('-2.44', $result);
-	     
-	    $number = new Number('-2.43534');
-	    $result = $number->round(2);
-	    $this->assertEquals('-2.44', $result);
-	}
-	
-	public function testPrecisionRound()
-	{
-	    $number = new Number('2.43434');
-	    $result = $number->precisionRound(2);
-	    $this->assertEquals('2.43', $result);
-	    
-	    $number = new Number('2.43534');
-	    $result = $number->precisionRound(2);
 	    $this->assertEquals('2.43', $result);
 	    
 
 	    $number = new Number('2.4353465465465');
-	    $result = $number->precisionRound(12);
+	    $result = $number->round(12);
 	    $this->assertEquals('2.435346546546', $result);
 	}
 	
 	public function testPrecisionRoundWorksWithStringForPrecision()
 	{
     	$number = new Number('2.4353465465465');
-    	$result = $number->precisionRound('1');
+    	$result = $number->impreciseRound('1');
     	$this->assertEquals('2.4', $result);
 	}
 	
