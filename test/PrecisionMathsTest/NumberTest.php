@@ -21,7 +21,7 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 		$this->assertEquals((string) $valueFloat, $number);
 	}
 	
-	public function testIntatiateNumberWithInvalidStringThrowsException()
+	public function testInstantiateNumberWithInvalidStringThrowsException()
 	{
 	    $this->setExpectedException('InvalidArgumentException');
 	    
@@ -32,6 +32,15 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    
 	    $value = '1IWishIWasANumber';
 	    $number = new Number($value);
+	}
+	
+	public function testCanInstantiateNumberFromAnotherNumber()
+	{
+		$number = new Number('2.5');
+		$numberTwo = new Number($number);
+		
+		$this->assertEquals($number, $numberTwo);
+		$this->assertEquals((string) $number, (string) $numberTwo);
 	}
 	
 	public function testAdditionOperation()
@@ -189,5 +198,35 @@ class NumberTest extends \PHPUnit_Framework_TestCase
     	$number = new Number('2.4353465465465');
     	$result = $number->precisionRound('1');
     	$this->assertEquals('2.4', $result);
+	}
+	
+	public function testAddingPreciseNumbersTogether()
+	{
+	    $number = new Number('2.5');
+	    $numberTwo = new Number('2.5');
+	
+	    $result = $number->add($numberTwo);
+	    
+	    $this->assertEquals('5.000000000000000000000', $result);
+	}
+	
+	public function testGetValueAsInt()
+	{
+	    $number = new Number('2.5');
+	    $this->assertEquals('integer', gettype($number->getValueAsInt()));
+	    $this->assertEquals(2, $number->getValueAsInt());
+	}
+	
+	public function testIsWholeNumber()
+	{
+	    $wholeNumber = new Number('2', 4);
+        $this->assertTrue($wholeNumber->isWholeNumber());    
+	    
+        $wholeNumberWithDecimalPoint = new Number('2.000', 4);
+        $this->assertTrue($wholeNumberWithDecimalPoint->isWholeNumber());
+         
+        $fractionalNumber = new Number('2.454', 4);
+        $this->assertFalse($fractionalNumber->isWholeNumber());
+         
 	}
 }

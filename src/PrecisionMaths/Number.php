@@ -27,7 +27,8 @@ class Number
     protected static $validTypesList = [
 	    'integer',
 	    'string',
-	    'double'
+	    'double',
+	    'object'
     ];
     
     /**
@@ -77,7 +78,8 @@ class Number
         	$scale = $this->scale;
         }
         
-        return self::create(bcadd($this, $rightOperand, $scale));
+        $result = bcadd($this, $rightOperand, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -109,8 +111,9 @@ class Number
         if ($scale === null) {
             $scale = $this->scale;
         }
-        
-        return self::create(bcsub($this, $rightOperand, $scale));
+
+        $result = bcsub($this, $rightOperand, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -143,7 +146,8 @@ class Number
             $scale = $this->scale;
         }
         
-        return self::create(bcmul($this, $rightOperand, $scale));
+        $result = bcmul($this, $rightOperand, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -171,12 +175,12 @@ class Number
     public function divide($rightOperand, $scale = null)
     {
         $this->checkValueIsValid($rightOperand);
-        
         if ($scale === null) {
             $scale = $this->scale;
         }
         
-        return self::create(bcdiv($this, $rightOperand, $scale));
+        $result = bcdiv($this, $rightOperand, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -235,8 +239,9 @@ class Number
         if ($scale === null) {
             $scale = $this->scale;
         }
-        
-        return self::create(bcpow($this, $rightOperand, $scale));
+
+        $result = bcpow($this, $rightOperand, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -270,7 +275,8 @@ class Number
             $scale = $this->scale;
         }
         
-        return self::create(bcpowmod($this, $rightOperand, $modulus, $scale));
+        $result = bcpowmod($this, $rightOperand, $modulus, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -302,7 +308,8 @@ class Number
             $scale = $this->scale;
         }
         
-        return self::create(bcsqrt($this, $scale));
+        $result = bcsqrt($this, $scale);
+        return self::create($result, $scale);
     }
     
     /**
@@ -314,7 +321,7 @@ class Number
      */
     public function sqrt($scale = null)
     {
-        return $this->sqaureroot();
+        return $this->sqaureroot($scale);
     }
     
     /**
@@ -330,7 +337,24 @@ class Number
     {
         $this->checkValueIsValid($rightOperand);
         
-        return bccomp($this, $rightOperand, $this->scale);
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+        return bccomp($this, $rightOperand, $scale);
+    }
+    
+    /**
+     * Alias for compare
+     *
+     * @see self::compare()
+     * @param mixed $rightOperand
+     * @param integer $scale
+     * @return Boolean
+     */
+    public function comp($rightOperand, $scale = null)
+    {
+        return $this->compare($rightOperand, $scale);
     }
     
     /**
@@ -345,7 +369,11 @@ class Number
     {
         $this->checkValueIsValid($rightOperand);
         
-    	if (bccomp($this, $rightOperand, $this->scale) === -1) {
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
+    	if (bccomp($this, $rightOperand, $scale) === -1) {
     		return true;
     	} else {
         	return false;
@@ -362,7 +390,7 @@ class Number
      */
     public function lt($rightOperand, $scale = null)
     {
-    	return $this->lessThan($rightOperand);
+    	return $this->lessThan($rightOperand, $scale);
     }
     
     /**
@@ -376,8 +404,12 @@ class Number
     public function greaterThan($rightOperand, $scale = null)
     {
         $this->checkValueIsValid($rightOperand);
+
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
         
-        if (bccomp($this, $rightOperand, $this->scale) === 1) {
+        if (bccomp($this, $rightOperand, $scale) === 1) {
             return true;
         } else {
         	return false;
@@ -394,7 +426,7 @@ class Number
      */
     public function gt($rightOperand, $scale = null)
     {
-        return $this->greaterThan($rightOperand);
+        return $this->greaterThan($rightOperand, $scale);
     }
     
     /**
@@ -472,7 +504,7 @@ class Number
     }
     
     /**
-     * Here there be magic
+     * Here there be magic...
      * 
      * @see http://php.net/manual/en/language.oop5.magic.php#object.tostring
      * @return string
@@ -537,8 +569,52 @@ class Number
      * @param mixed $value
      * @return \PrecisionMaths\Number
      */
-    public static function create($value)
+    public static function create($value, $scale = null)
     {
-    	return new static($value);
+    	return new static($value, $scale);
+    }
+    
+    /**
+     * returns the scale 
+     * 
+     * @return number
+     */
+    public function getScale()
+    {
+    	return $this->scale;
+    }
+    
+    /**
+     * Returns this value as an integer
+     * This obviously is going to truncate your number if it isn't a whole number
+     * 
+     * @return number
+     */
+    public function getValueAsInt()
+    {
+        return (int) $this->value;	
+    }
+    
+    /**
+     * Checks if value is a whole number
+     * 
+     * @return boolean
+     */
+    public function isWholeNumber()
+    {
+        $decimalPointPosition = strpos($this, '.');
+
+        if ($decimalPointPosition !== false) {
+            $mantissa = substr($this, $decimalPointPosition + 1);
+
+            if (preg_match('/[^0]/', $mantissa) == true) {
+            	return false;
+            } elseif (preg_match('/[^0]/', $mantissa) == false) {
+            	return true;
+            }
+            
+        } else {
+        	return true;
+        }
     }
 }
