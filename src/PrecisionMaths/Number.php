@@ -625,9 +625,11 @@ class Number
         if ($decimalPointPosition !== false) {
             $mantissa = substr($this, $decimalPointPosition + 1);
 
-            if (preg_match('/[^0]/', $mantissa) === 1) {
+            $matchResult = preg_match('/[^0]/', $mantissa);
+            
+            if ($matchResult === 1) {
             	return false;
-            } elseif (preg_match('/[^0]/', $mantissa) === 0) {
+            } elseif ($matchResult === 0) {
             	return true;
             } else {
             	throw new InvalidArgumentException('There was an error checking if whole number');

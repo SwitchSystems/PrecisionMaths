@@ -32,12 +32,11 @@ class NumberCollection extends ArrayObject
             throw new RuntimeException('BC MATH extension is not loaded');
         }
         
-        // Sort the array, to ensure future methods work properly
+        // Sort, cast to string and validate the array, to ensure future methods work properly
         array_walk($array, function(&$value, $key) {
-            $this->isValidString($value);
             $value = (string) $value;
+            $this->isValidString($value);
         });
-        
         sort($array, SORT_NUMERIC);
 
         if ($scale === null) { 
