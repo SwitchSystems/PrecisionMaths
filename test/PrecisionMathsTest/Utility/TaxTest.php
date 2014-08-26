@@ -4,6 +4,14 @@ namespace PrecisionMathsTest;
 use PrecisionMaths\Utility\TaxUtility;
 class TaxTest extends \PHPUnit_Framework_TestCase
 {
+    public function testCalculateTaxAmountOnGross()
+    {
+    	$util = new TaxUtility('20');
+    	
+    	$tax = $util->calculateTaxAmountOnGross('150');
+    	$this->assertEquals('30.00000000000000000000', $tax);
+    }
+    
     /*public function	testCalculateTax()
     {
         $util = new TaxUtility('20.00', 2);

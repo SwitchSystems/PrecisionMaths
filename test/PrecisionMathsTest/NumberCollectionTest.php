@@ -72,15 +72,9 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	public function testLowerQuartile()
 	{
 	    $array = [7, '1', 2, 5.00, '6'];
-	    $numberCollection = new NumberCollection($array, 2);
+	    $numberCollection = new NumberCollection($array);
 	    
 	    $result = $numberCollection->lowerQuartile();
-	    $this->assertEquals('2.00', $result);
-	    
-	    $array = ['2.131', '3.131', '4.131', '5.131'];
-	    $numberCollection = new NumberCollection($array, 2);
-	     
-	    $result = $numberCollection->lowerQuartile();
-	    $this->assertEquals('3.131', $result);
+	    $this->assertEquals('1.50000000000000000000', $result);
 	}
 }

@@ -104,12 +104,15 @@ class NumberCollection extends ArrayObject
     	if ($q1Pos->isWholeNumber() === true) {
     	    $q1 = $this[$q1Pos->getValueAsInt()];
     	} else {
-    		$q1Ceil = $this[$q1Pos->ceil()->getValueAsInt()];
-    		$q1Floor = $this[$q1Pos->floor()->getValueAsInt()];
+    	    $q1CeilPos = $q1Pos->ceil()->getValueAsInt() - 1;
+    		$q1Ceil = new Number($this[$q1CeilPos]);
+    		
+    		$q1FloorPos = $q1Pos->floor()->getValueAsInt() - 1;
+    		$q1Floor = new Number($this[$q1FloorPos]);
     	
-    		$q1 = $q1Ceil->add($q1Floor)->mul('2');
+    		$q1 = $q1Ceil->add($q1Floor)->div('2');
     	}
-    	
+
     	return $q1;
     }
 }
