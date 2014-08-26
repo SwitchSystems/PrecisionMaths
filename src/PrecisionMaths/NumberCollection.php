@@ -107,13 +107,15 @@ class NumberCollection extends ArrayObject
     {
         $count = new Number(count($this));
         
-    	$middleIndex = Number::create($count)->div('2').round(0);
-    	$median = $this[$middleIndex->getValueAsInt()];
-    	if ($count->mod('2')->isWholeNumber() === false) {
-    		return $median;
-    	}
+    	$middleIndex = Number::create($count)->div('2');
     	
-        return $median->add($this[$middleIndex->getValueAsInt() + 1])->div('2');
+    	$median = Number::create($this[$middleIndex->getValueAsInt() - 1]);
+
+    	if ($count->mod('2') != '0') {
+    		return Number::create($this[$middleIndex->floor()->getValueAsInt()]);
+    	}
+
+    	return Number::create($this[$middleIndex->floor()->getValueAsInt() - 1])->add($this[$middleIndex->ceil()->getValueAsInt() - 1])->div('2');
     }
     
     /**
