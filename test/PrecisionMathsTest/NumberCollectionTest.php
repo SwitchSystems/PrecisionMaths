@@ -111,4 +111,28 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $this->assertEquals("2.58843582110895691413", $numberCollection->standardDeviation());
 	    $this->assertEquals("2.31516738055804509471", $numberCollection->populationStandardDeviation());
 	}
+	
+	public function testInterquartileRange()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	     
+	    $result = $numberCollection->interquartileRange();
+	    $this->assertEquals('5.00000000000000000000', $result);
+	}
+	
+	public function testMedian()
+	{
+	    $array = [1, 2, 4, 5, 6, 7, 9, 22, 101];
+	    $numberCollection = new NumberCollection($array);
+	    
+	    $result = $numberCollection->median();
+	    $this->assertEquals('6.00000000000000000000', $result);
+	    
+	    $array = [1, 2, 4, 5, 6, 7, 9, 22];
+	    $numberCollection = new NumberCollection($array);
+	     
+	    $result = $numberCollection->median();
+	    $this->assertEquals('5.50000000000000000000', $result);
+	}
 }
