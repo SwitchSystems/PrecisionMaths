@@ -16,6 +16,13 @@ class NumberCollection extends ArrayObject
     protected $scale;
     
     /**
+     * Regex pattern to validate value string
+     *
+     * @var string
+     */
+    const VALID_STRING_REGEX_PATTERN = '/^\-?\d+(\.\d+)?$/';
+    
+    /**
      * @param array $array
      * @param string $scale
      */
@@ -26,7 +33,12 @@ class NumberCollection extends ArrayObject
         }
         
         // Sort the array, to ensure future methods work properly
-    	sort($array);
+        array_walk($array, function(&$value, $key) {
+            $this->isValidString($value);
+            $value = (string) $value;
+        });
+        
+        sort($array, SORT_NUMERIC);
 
         if ($scale === null) { 
             $this->scale = Number::DEFAULT_SCALE;
@@ -35,6 +47,24 @@ class NumberCollection extends ArrayObject
         }
              
     	parent::__construct($array);
+    }
+    
+    /**
+     * Checks if value is valid bcmath string
+     *
+     * @param string $value
+     *
+     * @return bool
+     */
+    protected function isValidString($value)
+    {
+        $matchResult = preg_match(self::VALID_STRING_REGEX_PATTERN, (string) $value);
+        
+        if ($matchResult === 0 || $matchResult === false) {
+            throw new RuntimeException(sprintf('Number::isValid() - Sorry an error occured whilst trying to validate %s', $value));
+        }
+
+        return true;
     }
     
     /**

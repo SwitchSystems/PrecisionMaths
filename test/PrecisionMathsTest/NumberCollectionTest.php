@@ -24,14 +24,21 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $this->assertEquals('18.25000000000000000000', $result);
 	}
 	
-	/*public function testSumMixedArrayInvalid()
+	public function testSort()
 	{
+	    $array = [1, 6, 2, 22, 4.25, '5'];
+	    $numberCollection = new NumberCollection($array);
+	    
+	    $this->assertEquals(['1', '2', '4.25', '5', '6', '22'], $numberCollection->getArrayCopy());
+	}
+	
+	public function testSumMixedArrayInvalid()
+	{
+	    $this->setExpectedException('RuntimeException');
+	    
 	    $array = [1, 6, 2, 4.25, 'NumberFive'];
 	    $numberCollection = new NumberCollection($array);
-	
-	    $result = $numberCollection->sum();
-	    $this->assertEquals('18.25000000000000000000', $result);
-	}*/
+	}
 	
 	public function testMean()
 	{
