@@ -42,8 +42,8 @@ class FinanceUtility
     	    $precisionBreakInMins = Number::create($breakInMins, $this->scale);
     	    $precisionDecimalTimeBreak = $precisionBreakInMins->div(DecimalTimeUtility::MINUTES_IN_HOUR);
     	    $decimalHoursWorked = $decimalHoursWorked->sub($precisionDecimalTimeBreak);
+    	    
     	};
-
     	return $decimalHoursWorked->mul($hourlyRate);
     }
 }

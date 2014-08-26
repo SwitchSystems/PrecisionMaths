@@ -24,14 +24,21 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $this->assertEquals('18.25000000000000000000', $result);
 	}
 	
-	/*public function testSumMixedArrayInvalid()
+	public function testSort()
 	{
+	    $array = [1, 6, 2, 22, 4.25, '5'];
+	    $numberCollection = new NumberCollection($array);
+	    
+	    $this->assertEquals(['1', '2', '4.25', '5', '6', '22'], $numberCollection->getArrayCopy());
+	}
+	
+	public function testSumMixedArrayInvalid()
+	{
+	    $this->setExpectedException('RuntimeException');
+	    
 	    $array = [1, 6, 2, 4.25, 'NumberFive'];
 	    $numberCollection = new NumberCollection($array);
-	
-	    $result = $numberCollection->sum();
-	    $this->assertEquals('18.25000000000000000000', $result);
-	}*/
+	}
 	
 	public function testMean()
 	{
@@ -76,5 +83,32 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    
 	    $result = $numberCollection->lowerQuartile();
 	    $this->assertEquals('1.50000000000000000000', $result);
+	}
+	
+	public function testUpperQuartile()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	     
+	    $result = $numberCollection->upperQuartile();
+	    $this->assertEquals('6.50000000000000000000', $result);
+	}
+
+	public function testVariance()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	    
+        $this->assertEquals("6.70000000000000000000", $numberCollection->variance());
+        $this->assertEquals("5.36000000000000000000", $numberCollection->populationVariance());
+	}
+	
+	public function testStandardDeviation()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	     
+	    $this->assertEquals("2.58843582110895691413", $numberCollection->standardDeviation());
+	    $this->assertEquals("2.31516738055804509471", $numberCollection->populationStandardDeviation());
 	}
 }
