@@ -361,6 +361,10 @@ class Number
      */
     public function comp($rightOperand, $scale = null)
     {
+        if ($scale === null) {
+            $scale = $this->scale;
+        }
+        
         return $this->compare($rightOperand, $scale);
     }
     
@@ -379,7 +383,6 @@ class Number
         if ($scale === null) {
             $scale = $this->scale;
         }
-        
     	if (bccomp($this, $rightOperand, $scale) === -1) {
     		return true;
     	} else {

@@ -243,7 +243,7 @@ class NumberCollection extends ArrayObject
     }
     
     /**
-     * Calculates standard deviation bassed on sample variance 
+     * Calculates standard deviation based on sample variance 
      * 
      * @return PrecisionMaths\PrecisionMaths\Number
      */
@@ -254,7 +254,7 @@ class NumberCollection extends ArrayObject
     }
 
     /**
-     * Calculates standard deviation bassed on population variance
+     * Calculates standard deviation based on population variance
      *
      * @return PrecisionMaths\PrecisionMaths\Number
      */

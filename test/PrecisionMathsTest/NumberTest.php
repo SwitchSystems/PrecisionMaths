@@ -229,4 +229,134 @@ class NumberTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse($fractionalNumber->isWholeNumber());
          
 	}
+	
+	public function testGetScale()
+	{
+	    $number = new Number('2.5', 20);
+	    $this->assertEquals(20, $number->getScale());
+	    
+	    $number = new Number('2.5454564', 10);
+	    $this->assertEquals(10, $number->getScale());
+	}
+	
+	public function testGreaterThan()
+	{
+	    //gt
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->gt('1.24234'));
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->gt(1.24234));
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->gt('2000'));
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->gt(2000));
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->gt('2.49999999999999999999999999999999999999999999'));
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->gt('2.500000000000000000000000000000000000000000000000000000001'));
+	    
+	    // greaterThan
+	    
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->greaterThan('1.24234'));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->greaterThan(1.24234));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->greaterThan('2000'));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->greaterThan(2000));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->greaterThan('2.49999999999999999999999999999999999999999999'));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->greaterThan('2.500000000000000000000000000000000000000000000000000000001'));
+	}
+	
+	public function testLessThan()
+	{
+	    //lt
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lt('1.24234'));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lt(1.24234));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->lt('2000'));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->lt(2000));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lt('2.49999999999999999999999999999999999999999999'));
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->lt('2.50000000000000000001'));
+	     
+        // Over the default precision
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lt('2.500000000000000000000000000000000000000000000000000001'));
+	    
+	    // lessThan
+	     
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lessThan('1.24234'));
+	
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lessThan(1.24234));
+	
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->lessThan('2000'));
+	
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->lessThan(2000));
+	
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lessThan('2.49999999999999999999999999999999999999999999'));
+	
+	    $number = new Number('2.5', 20);
+	    $this->assertTrue($number->lessThan('2.50000000000000000001'));
+	    
+	    // Over the default precision
+	    $number = new Number('2.5', 20);
+	    $this->assertFalse($number->lessThan('2.500000000000000000000000000000000000000000000000000001'));
+	}
+	
+	public function testPower()
+	{
+	    $number = new Number('2', 20);
+	    $this->assertEquals('4', $number->pow('2'));
+	    $this->assertEquals('4', $number->power('2'));
+	    
+	    $number = new Number('-2', 20);
+	    $this->assertEquals('4', $number->pow('2'));
+	    $this->assertEquals('4', $number->power('2'));
+	    
+	    $number = new Number('2', 20);
+	    $this->assertEquals('8', $number->pow('3'));
+	    $this->assertEquals('8', $number->power('3'));
+	     
+	    $number = new Number('-2', 20);
+	    $this->assertEquals('-8', $number->pow('3'));
+	    $this->assertEquals('-8', $number->power('3'));
+
+	    $number = new Number('2.5645654', 20);
+	    $this->assertEquals('16.86713558477266018626', $number->pow('3'));
+	    $this->assertEquals('16.86713558477266018626', $number->power('3'));
+	    
+	    $number = new Number('-2.5645654', 20);
+	    $this->assertEquals('-16.86713558477266018626', $number->pow('3'));
+	    $this->assertEquals('-16.86713558477266018626', $number->power('3'));
+	}
 }

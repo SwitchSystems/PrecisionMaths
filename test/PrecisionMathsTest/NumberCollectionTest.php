@@ -102,4 +102,13 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals("6.70000000000000000000", $numberCollection->variance());
         $this->assertEquals("5.36000000000000000000", $numberCollection->populationVariance());
 	}
+	
+	public function testStandardDeviation()
+	{
+	    $array = [7, '1', 2, 5.00, '6'];
+	    $numberCollection = new NumberCollection($array);
+	     
+	    $this->assertEquals("2.58843582110895691413", $numberCollection->standardDeviation());
+	    $this->assertEquals("2.31516738055804509471", $numberCollection->populationStandardDeviation());
+	}
 }
