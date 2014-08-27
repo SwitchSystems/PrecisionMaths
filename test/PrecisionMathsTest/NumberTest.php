@@ -386,9 +386,29 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $number = new Number('21', 20);
 
 	    $this->assertSame('1', (string) $number->powmod('1', '2', 0));
-	    $this->assertSame('1', (string) $number->powermodulus('1', '2', 0));
+	    $this->assertSame('1', (string) $number->powerModulus('1', '2', 0));
 
 	    $this->assertSame('9', (string) $number->powmod('1', '12', 0));
-	    $this->assertSame('9', (string) $number->powermodulus('1', '12', 0));
+	    $this->assertSame('9', (string) $number->powerModulus('1', '12', 0));
+	}
+	
+	public function testComp()
+	{
+	    $number = new Number('21', 20);
+	    $this->assertSame('0', (string) $number->compare('21'));
+	    $this->assertSame('0', (string) $number->comp('21'));
+	    
+	    $number = new Number('21.23432423', 20);
+	    $this->assertSame('0', (string) $number->compare('21.23432423'));
+	    $this->assertSame('0', (string) $number->comp('21.23432423'));
+	    
+
+	    $number = new Number('23.23432423', 20);
+	    $this->assertSame('1', (string) $number->compare('21.23432423'));
+	    $this->assertSame('1', (string) $number->comp('21.23432423'));
+	    
+	    $number = new Number('19.23432423', 20);
+	    $this->assertSame('-1', (string) $number->compare('21.23432423'));
+	    $this->assertSame('-1', (string) $number->comp('21.23432423'));
 	}
 }
