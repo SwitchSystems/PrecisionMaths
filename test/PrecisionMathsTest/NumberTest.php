@@ -12,13 +12,13 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $valueInt = 1;
 	    
 		$number = new Number($valueString);
-		$this->assertEquals($valueString, $number);
+		$this->assertSame($valueString, (string) $number);
 		
 		$number = new Number($valueInt);
-		$this->assertEquals((string) $valueInt, $number);
+		$this->assertSame((string) $valueInt, (string) $number);
 		
 		$number = new Number($valueFloat);
-		$this->assertEquals((string) $valueFloat, $number);
+		$this->assertSame((string) $valueFloat, (string) $number);
 	}
 	
 	public function testInstantiateNumberWithInvalidStringThrowsException()
@@ -50,10 +50,10 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    
 	    $number = new Number($valueString);
 	    $result = $number->addition($rightOperandString);
-	    $this->assertEquals("16.26153391900000000000", $result);
+	    $this->assertSame("16.26153391900000000000", (string) $result);
 	    
 	    $result = $number->add($rightOperandString);
-	    $this->assertEquals("16.26153391900000000000", $result);
+	    $this->assertSame("16.26153391900000000000", (string) $result);
 	}
 
 	public function testInvalidRightOperandAdditionOperation()
@@ -75,10 +75,10 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	
 	    $number = new Number($valueString);
 	    $result = $number->subtract($rightOperandString);
-	    $this->assertEquals("5.576849919000000000", $result);
+	    $this->assertSame("5.57684991900000000000", (string) $result);
 	
 	    $result = $number->sub($rightOperandString);
-	    $this->assertEquals("5.576849919000000000",  $result);
+	    $this->assertSame("5.57684991900000000000", (string) $result);
 	}
 	
 	public function testInvalidRightOperandMultiplyOperation()
@@ -100,10 +100,10 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	
 	    $number = new Number($valueString);
 	    $result = $number->multiply($rightOperandString);
-	    $this->assertEquals("58.334057594934298", $result);
+	    $this->assertSame("58.334057594934298", (string) $result);
 	
 	    $result = $number->mul($rightOperandString);
-	    $this->assertEquals("58.334057594934298",  $result);
+	    $this->assertSame("58.334057594934298",  (string) $result);
 	}
 	
 	public function testDivideOperation()
@@ -113,32 +113,32 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	
 	    $number = new Number($valueString);
 	    $result = $number->divide($rightOperandString);
-	    $this->assertEquals("2.04389608883145257267", $result);
+	    $this->assertSame("2.04389608883145257267", (string) $result);
 	
 	    $result = $number->div($rightOperandString);
-	    $this->assertEquals("2.04389608883145257267",  $result);
+	    $this->assertSame("2.04389608883145257267",  (string) $result);
 	}
 	
 	public function testFloorOperation()
 	{
 	    $number = new Number('2.4');
 	    $result = $number->floor();
-	    $this->assertEquals("2", $result);
+	    $this->assertSame("2", (string) $result);
 	    
 	    $number = new Number('-2.4');
 	    $result = $number->floor();
-	    $this->assertEquals("-3", $result);
+	    $this->assertSame("-3", (string) $result);
 	}
 	
 	public function testCeilOperation()
 	{
 	    $number = new Number('2.4');
 	    $result = $number->ceil();
-	    $this->assertEquals("3", $result);
+	    $this->assertSame("3", (string) $result);
 	     
 	    $number = new Number('-2.4');
 	    $result = $number->ceil();
-	    $this->assertEquals("-2", $result);
+	    $this->assertSame("-2", (string) $result);
 	}
 	
 	public function testIsNegative()
@@ -154,50 +154,50 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	{
 	    $number = new Number('2.43434');
 	    $result = $number->impreciseRound(2);
-	    $this->assertEquals('2.43', $result);
+	    $this->assertSame('2.43', $result);
 	    
 	    $number = new Number('2.43634');
 	    $result = $number->impreciseRound(2);
-	    $this->assertEquals('2.44', $result);
+	    $this->assertSame('2.44', $result);
 	    
 	    $number = new Number('2.43534');
 	    $result = $number->impreciseRound(2);
-	    $this->assertEquals('2.44', $result);
+	    $this->assertSame('2.44', $result);
 	     
 	    $number = new Number('-2.43434');
 	    $result = $number->impreciseRound(2);
-	    $this->assertEquals('-2.43', $result);
+	    $this->assertSame('-2.43', $result);
 	     
 	    $number = new Number('-2.43634');
 	    $result = $number->impreciseRound(2);
-	    $this->assertEquals('-2.44', $result);
+	    $this->assertSame('-2.44', $result);
 	     
 	    $number = new Number('-2.43534');
 	    $result = $number->impreciseRound(2);
-	    $this->assertEquals('-2.44', $result);
+	    $this->assertSame('-2.44', $result);
 	}
 	
 	public function testRound()
 	{
 	    $number = new Number('2.43434');
 	    $result = $number->round(2);
-	    $this->assertEquals('2.43', $result);
+	    $this->assertSame('2.43',(string) $result);
 	    
 	    $number = new Number('2.43534');
 	    $result = $number->round(2);
-	    $this->assertEquals('2.43', $result);
+	    $this->assertSame('2.43', (string) $result);
 	    
 
 	    $number = new Number('2.4353465465465');
 	    $result = $number->round(12);
-	    $this->assertEquals('2.435346546546', $result);
+	    $this->assertSame('2.435346546546', (string) $result);
 	}
 	
 	public function testPrecisionRoundWorksWithStringForPrecision()
 	{
     	$number = new Number('2.4353465465465');
     	$result = $number->impreciseRound('1');
-    	$this->assertEquals('2.4', $result);
+    	$this->assertSame('2.4', (string) $result);
 	}
 	
 	public function testAddingPreciseNumbersTogether()
@@ -207,14 +207,14 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	
 	    $result = $number->add($numberTwo);
 	    
-	    $this->assertEquals('5.000000000000000000000', $result);
+	    $this->assertSame('5.00000000000000000000', (string) $result);
 	}
 	
 	public function testGetValueAsInt()
 	{
 	    $number = new Number('2.5');
-	    $this->assertEquals('integer', gettype($number->getValueAsInt()));
-	    $this->assertEquals(2, $number->getValueAsInt());
+	    $this->assertSame('integer', gettype($number->getValueAsInt()));
+	    $this->assertSame(2, $number->getValueAsInt());
 	}
 	
 	public function testIsWholeNumber()
@@ -233,10 +233,10 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	public function testGetScale()
 	{
 	    $number = new Number('2.5', 20);
-	    $this->assertEquals(20, $number->getScale());
+	    $this->assertSame(20, $number->getScale());
 	    
 	    $number = new Number('2.5454564', 10);
-	    $this->assertEquals(10, $number->getScale());
+	    $this->assertSame(10, $number->getScale());
 	}
 	
 	public function testGreaterThan()
@@ -336,27 +336,59 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	public function testPower()
 	{
 	    $number = new Number('2', 20);
-	    $this->assertEquals('4', $number->pow('2'));
-	    $this->assertEquals('4', $number->power('2'));
+	    $this->assertSame('4', (string) $number->pow('2'));
+	    $this->assertSame('4', (string) $number->power('2'));
 	    
 	    $number = new Number('-2', 20);
-	    $this->assertEquals('4', $number->pow('2'));
-	    $this->assertEquals('4', $number->power('2'));
+	    $this->assertSame('4', (string) $number->pow('2'));
+	    $this->assertSame('4', (string) $number->power('2'));
 	    
 	    $number = new Number('2', 20);
-	    $this->assertEquals('8', $number->pow('3'));
-	    $this->assertEquals('8', $number->power('3'));
+	    $this->assertSame('8', (string) $number->pow('3'));
+	    $this->assertSame('8', (string) $number->power('3'));
 	     
 	    $number = new Number('-2', 20);
-	    $this->assertEquals('-8', $number->pow('3'));
-	    $this->assertEquals('-8', $number->power('3'));
+	    $this->assertSame('-8', (string) $number->pow('3'));
+	    $this->assertSame('-8', (string) $number->power('3'));
 
 	    $number = new Number('2.5645654', 20);
-	    $this->assertEquals('16.86713558477266018626', $number->pow('3'));
-	    $this->assertEquals('16.86713558477266018626', $number->power('3'));
+	    $this->assertSame('16.86713558477266018626', (string) $number->pow('3'));
+	    $this->assertSame('16.86713558477266018626', (string) $number->power('3'));
 	    
 	    $number = new Number('-2.5645654', 20);
-	    $this->assertEquals('-16.86713558477266018626', $number->pow('3'));
-	    $this->assertEquals('-16.86713558477266018626', $number->power('3'));
+	    $this->assertSame('-16.86713558477266018626', (string) $number->pow('3'));
+	    $this->assertSame('-16.86713558477266018626',  (string) $number->power('3'));
+	}
+	
+	public function testSquareroot()
+	{
+	    $number = new Number('34', 20);
+
+        $this->assertSame('5.83095189484530047087', (string) $number->sqrt());
+	    $this->assertSame('5.83095189484530047087', (string) $number->squareroot());
+	}
+	
+	public function testMod()
+	{
+	    $number = new Number('34', 20);
+	    
+	    $this->assertSame('0', (string) $number->mod('2'));
+	    $this->assertSame('0', (string) $number->modulus('2'));
+	    
+	    $numberTwo = new Number('35', 20);
+	     
+	    $this->assertSame('1', (string) $numberTwo->mod('2'));
+	    $this->assertSame('1', (string) $numberTwo->modulus('2'));
+	}
+	
+	public function testModPow()
+	{
+	    $number = new Number('21', 20);
+
+	    $this->assertSame('1', (string) $number->powmod('1', '2', 0));
+	    $this->assertSame('1', (string) $number->powermodulus('1', '2', 0));
+
+	    $this->assertSame('9', (string) $number->powmod('1', '12', 0));
+	    $this->assertSame('9', (string) $number->powermodulus('1', '12', 0));
 	}
 }

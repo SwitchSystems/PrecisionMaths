@@ -12,7 +12,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 		$numberCollection = new NumberCollection($array);
 		
 		$result = $numberCollection->sum();
-		$this->assertEquals('18.00000000000000000000', $result);
+		$this->assertSame('18.00000000000000000000', (string) $result);
 	}
 	
 	public function testSumMixedArray()
@@ -21,15 +21,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array);
 	
 	    $result = $numberCollection->sum();
-	    $this->assertEquals('18.25000000000000000000', $result);
-	}
-	
-	public function testSort()
-	{
-	    $array = [1, 6, 2, 22, 4.25, '5'];
-	    $numberCollection = new NumberCollection($array);
-	    
-	    $this->assertEquals(['1', '2', '4.25', '5', '6', '22'], $numberCollection->getArrayCopy());
+	    $this->assertSame('18.25000000000000000000', (string) $result);
 	}
 	
 	public function testSumMixedArrayInvalid()
@@ -46,7 +38,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array, 2);
 	    
 	    $result = $numberCollection->mean();
-	    $this->assertEquals('3.6', $result);
+	    $this->assertSame('3.60', (string) $result);
 	}
 	
 	public function testRangeSorted()
@@ -55,7 +47,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array, 2);
 	     
 	    $result = $numberCollection->range();
-	    $this->assertEquals('6.00', $result);
+	    $this->assertSame('6.00', (string) $result);
 	}
 	
 	public function testRangeUnSorted()
@@ -64,7 +56,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array, 2);
 	
 	    $result = $numberCollection->range();
-	    $this->assertEquals('6.00', $result);
+	    $this->assertSame('6.00', (string) $result);
 	}
 	
 	public function testRangeUnSortedMixed()
@@ -73,7 +65,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array, 2);
 	
 	    $result = $numberCollection->range();
-	    $this->assertEquals('6.00', $result);
+	    $this->assertSame('6.00', (string) $result);
 	}
 	
 	public function testLowerQuartile()
@@ -82,7 +74,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array);
 	    
 	    $result = $numberCollection->lowerQuartile();
-	    $this->assertEquals('1.50000000000000000000', $result);
+	    $this->assertSame('1.50000000000000000000', (string) $result);
 	}
 	
 	public function testUpperQuartile()
@@ -91,7 +83,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array);
 	     
 	    $result = $numberCollection->upperQuartile();
-	    $this->assertEquals('6.50000000000000000000', $result);
+	    $this->assertSame('6.50000000000000000000', (string) $result);
 	}
 
 	public function testVariance()
@@ -99,8 +91,8 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $array = [7, '1', 2, 5.00, '6'];
 	    $numberCollection = new NumberCollection($array);
 	    
-        $this->assertEquals("6.70000000000000000000", $numberCollection->variance());
-        $this->assertEquals("5.36000000000000000000", $numberCollection->populationVariance());
+        $this->assertSame("6.70000000000000000000", (string) $numberCollection->variance());
+        $this->assertSame("5.36000000000000000000", (string) $numberCollection->populationVariance());
 	}
 	
 	public function testStandardDeviation()
@@ -108,8 +100,8 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $array = [7, '1', 2, 5.00, '6'];
 	    $numberCollection = new NumberCollection($array);
 	     
-	    $this->assertEquals("2.58843582110895691413", $numberCollection->standardDeviation());
-	    $this->assertEquals("2.31516738055804509471", $numberCollection->populationStandardDeviation());
+	    $this->assertSame("2.58843582110895691413", (string) $numberCollection->standardDeviation());
+	    $this->assertSame("2.31516738055804509471", (string) $numberCollection->populationStandardDeviation());
 	}
 	
 	public function testInterquartileRange()
@@ -118,7 +110,7 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array);
 	     
 	    $result = $numberCollection->interquartileRange();
-	    $this->assertEquals('5.00000000000000000000', $result);
+	    $this->assertSame('5.00000000000000000000', (string) $result);
 	}
 	
 	public function testMedian()
@@ -127,12 +119,36 @@ class NumberCollectionTest extends \PHPUnit_Framework_TestCase
 	    $numberCollection = new NumberCollection($array);
 	    
 	    $result = $numberCollection->median();
-	    $this->assertEquals('6.00000000000000000000', $result);
+	    $this->assertSame('6', (string) $result);
 	    
 	    $array = [1, 2, 4, 5, 6, 7, 9, 22];
 	    $numberCollection = new NumberCollection($array);
 	     
 	    $result = $numberCollection->median();
-	    $this->assertEquals('5.50000000000000000000', $result);
+	    $this->assertSame('5.50000000000000000000', (string) $result);
+	}
+	
+	public function testAppend()
+	{
+	    $array = [1, 2, 4, 5, 6, 22, 101];
+	    $numberCollection = new NumberCollection($array);
+
+	    $numberCollection->append(1.5);
+	    $this->assertSame(['1', '1.5','2', '4', '5', '6', '22', '101'], $numberCollection->getSortedArrayCopy());
+
+	    $numberCollection->append(1.75);
+	    $this->assertSame(['1', '1.5', '1.75','2', '4', '5', '6', '22', '101'], $numberCollection->getSortedArrayCopy());
+	    
+	    $numberCollection->append(1.25);
+	    $this->assertSame(['1', '1.25', '1.5', '1.75', '2', '4', '5', '6', '22', '101'], $numberCollection->getSortedArrayCopy());
+	}
+	
+	public function testGetSortedArrayCopy()
+	{
+	    
+	    $array = [1, 6, 2, 22, 4.25, '5'];
+	    $numberCollection = new NumberCollection($array);
+	    
+	    $this->assertSame(['1', '2', '4.25', '5', '6', '22'], $numberCollection->getSortedArrayCopy());
 	}
 }

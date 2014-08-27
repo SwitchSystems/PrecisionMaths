@@ -51,7 +51,7 @@ class DecimalTimeUtility
     /**
      * @param string $scale
      */
-    public function __construct($scale = null)
+    public function __construct($scale = Number::DEFAULT_SCALE)
     {
         // Don't worry about a default scale, let Number class take care of it
         $this->scale = $scale;

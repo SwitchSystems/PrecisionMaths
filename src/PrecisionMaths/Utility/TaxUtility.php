@@ -13,7 +13,7 @@ class TaxUtility
      * Current Tax Rate
      * @var float
      */
-    protected $taxRate;
+    protected $taxRatePercentage;
     
     /**
      * @var string
@@ -21,74 +21,59 @@ class TaxUtility
     protected $scale;
     
     /**
-     * @param mixed $taxRate
+     * @param mixed $taxRatePercentage
      */
-    public function __construct($taxRate, $scale = null)
+    public function __construct($taxRatePercentage, $scale = Number::DEFAULT_SCALE)
     {
         // Don't worry about a default scale, let Number class take care of it
         $this->scale = $scale;
         
-        $this->taxRate = new Number($taxRate, $this->scale);
+        $this->taxRatePercentage = new Number($taxRatePercentage, $this->scale);
     }
     
     /**
-     * Calculate and return tax for a given value
+     * Calculates and returns tax for value
      * 
      * @param mixed $value
+     * @return  \PrecisionMaths\Number
      */
-	public function calculateTaxAmountOnGross($value)
-	{
-		$numberObj = Number::create($value, $this->scale);
-
-		return $this->taxRate->div('100')->mul($numberObj);
-	}
+    public function fetchValueOfTaxToBeAdded($value)
+    {
+        return $this->taxRatePercentage->div('100')->mul($value);
+    }
 	
+    /**
+     * Calculates and returns the proportion of the value that is tax
+     * 
+     * @param mixed $value
+     * @return  \PrecisionMaths\Number
+     */
+    public function fetchValueOfAddedTax($value)
+    {
+        return Number::create($value, $this->scale)->sub($this->removeTaxFrom($value));
+    }
+    
 	/**
-	 * Returns the value of the tax that has been added to the value
-	 *
-	 * @param mixed $value
-	 * @return Number
-	 */
-	public function calculateTaxAmountFromNet($value)
-	{
-	    $numberObj = Number::create($value, $this->scale);
-	    $gross = $this->calculateGrossFromNet($value);
-	    
-	    //return $numberObj->sub($gross);
-	    return $gross->sub($value);
-	    /*
-	    $numberObj = Number::create($value, $this->scale);
-	    $onePercentOfValue = $numberObj->div($this->taxRate->add('100'));
-	    
-	    return $numberObj->sub($onePercentOfValue->mul('100'));*/
-	}
-	
-	/**
-	 * Calculates the Gross value
+	 * Calculates and returns the value with tax
 	 * 
 	 * @param mixed $value
 	 * @return Number
 	 */
-	public function calculateGrossFromNet($value)
+	public function addTaxTo($value)
 	{
-	    $numberObj = Number::create($value, $this->scale);
-	
-	    $tax = $this->taxRate->div('100')->mul($numberObj);
+	    $tax = $this->fetchValueOfTaxToBeAdded($value);
 	    
-	    return $tax->add($numberObj);
+	    return $tax->add($value);
 	}
 	
 	/**
-	 * Calculates the Net value 
+	 * Calculates and returns the value before tax was added
 	 * 
 	 * @param mixed $value
 	 * @return Number
 	 */
-	public function calculateNetFromGross($value)
+	public function removeTaxFrom($value)
 	{
-	    $numberObj = Number::create($value, $this->scale);
-	    $onePercentOfValue = $numberObj->div($this->taxRate->add('100'));
-	    
-	    return $onePercentOfValue->mul('100');
+	    return Number::create($value, $this->scale)->div($this->taxRatePercentage->add('100'))->mul('100');
 	}
 }

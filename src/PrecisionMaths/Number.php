@@ -48,20 +48,14 @@ class Number
      *
      * @param string $value
      */
-    public function __construct($value, $scale = null)
+    public function __construct($value, $scale = self::DEFAULT_SCALE)
     {
         if (! extension_loaded('bcmath')) {
             throw new RuntimeException('BC MATH extension is not loaded');
         }
         
         $this->checkValueIsValid($value);
-        
-        if ($scale === null) {
-            $this->scale = self::DEFAULT_SCALE;
-        } else {
-            $this->scale = (int) $scale;
-        }
-        
+        $this->scale = (int) $scale;
         $this->value = (string) $value;
     }
 
@@ -606,14 +600,15 @@ class Number
     }
     
     /**
-     * Returns this value as an integer
-     * This obviously is going to truncate your number if it isn't a whole number
+     * Returns this value as an float
+     * This is going to truncate precision greater than
+     * than float max 
      *
      * @return number
      */
     public function getValueAsFloat($precision = self::DEFAULT_SCALE)
     {
-        return (float) $this->impreciseRound($precision);
+        return (float) (string) $this->impreciseRound($precision);
     }
     
     /**
