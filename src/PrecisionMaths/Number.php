@@ -606,14 +606,15 @@ class Number
     }
     
     /**
-     * Returns this value as an integer
-     * This obviously is going to truncate your number if it isn't a whole number
+     * Returns this value as an float
+     * This is going to truncate precision greater than
+     * than float max 
      *
      * @return number
      */
     public function getValueAsFloat($precision = self::DEFAULT_SCALE)
     {
-        return (float) $this->impreciseRound($precision);
+        return (float) (string) $this->impreciseRound($precision);
     }
     
     /**

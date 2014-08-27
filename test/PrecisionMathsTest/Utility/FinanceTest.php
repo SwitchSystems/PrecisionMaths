@@ -11,12 +11,12 @@ class FinanceUtilityTest extends \PHPUnit_Framework_TestCase
 		$util = new FinanceUtility();
 		$preciseUtil = new FinanceUtility();
 		
-		/*$start = new DateTime('2014-05-03 9:00');
+		$start = new DateTime('2014-05-03 9:00');
 		$end = new DateTime('2014-05-03 17:00');
         $hourlyRate = '6.00';		
 		$result = $util->calculatePayForPeriod($start, $end, $hourlyRate);
 		$this->assertEquals('48.00', $result);
-		*/
+		
 		$start = new DateTime('2014-05-03 9:00');
 		$end = new DateTime('2014-05-03 17:59:01');
 		$hourlyRate = '6.00';
