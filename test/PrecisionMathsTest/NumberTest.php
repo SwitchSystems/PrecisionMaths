@@ -217,6 +217,13 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertSame(2, $number->getValueAsInt());
 	}
 	
+	public function testGetValueAsFloat()
+	{                         
+	    $number = new Number('2.553454545345345');
+	    $this->assertSame('double', gettype($number->getValueAsFloat()));
+	    $this->assertSame(2.5534545453452999, $number->getValueAsFloat());
+	}
+	
 	public function testIsWholeNumber()
 	{
 	    $wholeNumber = new Number('2', 4);
