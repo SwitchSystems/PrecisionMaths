@@ -23,7 +23,7 @@ class TaxUtility
     /**
      * @param mixed $taxRatePercentage
      */
-    public function __construct($taxRatePercentage, $scale = null)
+    public function __construct($taxRatePercentage, $scale = Number::DEFAULT_SCALE)
     {
         // Don't worry about a default scale, let Number class take care of it
         $this->scale = $scale;

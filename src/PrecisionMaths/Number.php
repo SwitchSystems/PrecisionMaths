@@ -48,20 +48,14 @@ class Number
      *
      * @param string $value
      */
-    public function __construct($value, $scale = null)
+    public function __construct($value, $scale = self::DEFAULT_SCALE)
     {
         if (! extension_loaded('bcmath')) {
             throw new RuntimeException('BC MATH extension is not loaded');
         }
         
         $this->checkValueIsValid($value);
-        
-        if ($scale === null) {
-            $this->scale = self::DEFAULT_SCALE;
-        } else {
-            $this->scale = (int) $scale;
-        }
-        
+        $this->scale = (int) $scale;
         $this->value = (string) $value;
     }
 
