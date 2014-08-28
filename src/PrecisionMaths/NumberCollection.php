@@ -278,7 +278,6 @@ class NumberCollection extends ArrayObject
     {
         $this->isValidString($value);
         parent::append((string) $value);
-        $this->natsort();
     }
     
     /**
