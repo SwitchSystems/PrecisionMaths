@@ -12,13 +12,13 @@ Numbers are immutable and will always return a new object with the value of the 
 
 __Example 1:__
 
-`
+{code}
     <?php
     
     $number = new Number('20'); // Instatiates Number object with a value of 20
     $result = $number->add('20'); // returns a new instance of Number with a value of 40
     echo $result; // prints '40' 
-`
+{code}
 
 ## Number Collection Class
 
