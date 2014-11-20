@@ -3,10 +3,7 @@
     "description": "Wrapper for BCMath ext for precise basic and advanced math operations",
     "type": "library",
     "license": "proprietary",
-        
-    "minimum-stability" : "dev",
-    "prefer-stable": true,
-        
+                
     "require":
     {
         "php": ">=5.4.0",
