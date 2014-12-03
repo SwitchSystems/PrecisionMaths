@@ -126,7 +126,7 @@ class DecimalTimeUtilityTest extends \PHPUnit_Framework_TestCase
 		
 		$start = new DateTime('2014-05-01 9:00:00');
 		$end = new DateTime('2015-07-02 17:00:00');
-		$this->assertEquals('14.00', $util->dateRangeAsMonths($start, $end));
+		$this->assertEquals('14.03', $util->dateRangeAsMonths($start, $end));
 	}
 	
 	public function testDateRangeYears()
@@ -140,6 +140,6 @@ class DecimalTimeUtilityTest extends \PHPUnit_Framework_TestCase
 		
 		$start = new DateTime('2014-05-01 9:00:00');
 		$end = new DateTime('2017-06-02 17:00:00');
-		$this->assertEquals('3.00', $util->dateRangeAsYears($start, $end));
+		$this->assertEquals('3.08', $util->dateRangeAsYears($start, $end));
 	}
 }
