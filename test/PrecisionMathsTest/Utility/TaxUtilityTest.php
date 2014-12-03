@@ -2,7 +2,7 @@
 namespace PrecisionMathsTest;
 
 use PrecisionMaths\Utility\TaxUtility;
-class TaxTest extends \PHPUnit_Framework_TestCase
+class TaxUtilityTest extends \PHPUnit_Framework_TestCase
 {
     public function testFetchValueOfTaxToBeAdded()
     {
