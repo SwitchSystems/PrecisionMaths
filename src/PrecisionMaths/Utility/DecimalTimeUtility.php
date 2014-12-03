@@ -122,7 +122,7 @@ class DecimalTimeUtility
     	
     	$nonLeaps = (new Number($years, $this->scale))->sub($leaps);
     	
-    	$days = (new Number($nonLeaps, $this->scale))->mul(static::DAYS_IN_YEAR);
+    	$days = $nonLeaps->mul(static::DAYS_IN_YEAR);
     	
     	$total = $days->add($leapDays);
     	
