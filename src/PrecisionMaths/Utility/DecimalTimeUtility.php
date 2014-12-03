@@ -98,7 +98,7 @@ class DecimalTimeUtility
     	    	
     	$dateInterval = $this->calculateDateDiff($start, $end);
     	
-    	$daysInYear = $this->getDaysInYear($dateInterval->y,$leaps);
+    	$daysInYear = $this->calculateAverageDaysInYear($dateInterval->y,$leaps);
     	 
     	$years = new Number($dateInterval->y, $this->scale);
     	 
@@ -108,15 +108,15 @@ class DecimalTimeUtility
     	->add($this->convertMinutesToYears($dateInterval->i, $daysInYear))
     	->add($this->convertSecondsToYears($dateInterval->s, $daysInYear));
     	 
-    	return $days;
+    	return $years;
     }
     
     /**
      * Returns the average number of days in a year based on total years and number of leap years
-     * @param mixed $years
-     * @param mixed $leaps
+     * @param mixed $years the year interval between two dates
+     * @param mixed $leaps the number of leap years that occur between the two dates
      */
-    public function getDaysInYear($years, $leaps)
+    public function calculateAverageDaysInYear($years, $leaps)
     {
     	$leapDays = (new Number($leaps, $this->scale))->mul(static::DAYS_IN_YEAR + 1);
     	
@@ -213,16 +213,17 @@ class DecimalTimeUtility
     	->add($this->convertMinutesToMonths($dateInterval->i, $daysInMonth))
     	->add($this->convertSecondsToMonths($dateInterval->s, $daysInMonth));
     	 
-    	return $days;
+    	return $months;
     }
     
     /**
-     * Returns the average number of days in a month based on total years and number of leap years
-     * @param mixed $months
-     * @param mixed $years
-     * @param mixed $leaps
+     * Returns the average number of days in a month based on a given array of month,
+     * and a total number of years and the number of leap years.
+     * @param mixed $months the month interval between two dates as an array, where each element is a month
+     * @param mixed $years the year interval between two dates
+     * @param mixed $leaps the number of leap years within the year interval
      */
-    public function getDaysInMonth($months, $years, $leaps)
+    public function calculateAverageDaysInMonth($months, $years, $leaps)
     {
     	$days = new Number(0, $this->scale);
     	
