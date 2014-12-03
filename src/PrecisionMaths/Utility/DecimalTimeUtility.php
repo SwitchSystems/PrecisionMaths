@@ -227,23 +227,23 @@ class DecimalTimeUtility
     {
     	$days = new Number(0, $this->scale);
     	
-    	for($years; $years > 0; $years -= 1)
-    		for($i = 1; $i <= 12; $i += 1)
+    	for($years; $years > 0; $years--)
+    		for($i = 1; $i <= 12; $i++)
     			$months[] = $i;
-    	
+    	    		
     	foreach($months as $month)
     	{
     		if(in_array($month,['1','3','5','7','8','10','12']))
-    			$days->add('31');
+    			$days = $days->add('31');
     		elseif($month !== '2')
-    			$days->add('30');
+    			$days = $days->add('30');
     		elseif($leaps > 0)
     		{
-    			$days->add('29');
+    			$days = $days->add('29');
     			$leaps -= 1;
     		}
     		else
-    			$days->add('28');
+    			$days = $days->add('28');
     	}
     	
     	return $days->div(count($months));
