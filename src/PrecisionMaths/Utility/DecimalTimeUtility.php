@@ -161,7 +161,7 @@ class DecimalTimeUtility
      */
     public function convertHoursToYears($hours, $daysInYear)
     {
-    	return (new Number($hours, $this->scale))->div($daysInYear)->mul(static::HOURS_IN_DAY);
+    	return (new Number($hours, $this->scale))->div($daysInYear)->div(static::HOURS_IN_DAY);
     }
     
     /**
@@ -173,7 +173,7 @@ class DecimalTimeUtility
      */
     public function convertMinutesToYears($minutes, $daysInYear)
     {
-    	return (new Number($minutes, $this->scale))->div($daysInYear)->mul(static::MINUTES_IN_DAY);
+    	return (new Number($minutes, $this->scale))->div($daysInYear)->div(static::MINUTES_IN_DAY);
     }
     
     /**
@@ -185,7 +185,7 @@ class DecimalTimeUtility
      */
     public function convertSecondsToYears($seconds, $daysInYear)
     {
-    	return (new Number($seconds, $this->scale))->div($daysInYear)->mul(static::SECONDS_IN_DAY);
+    	return (new Number($seconds, $this->scale))->div($daysInYear)->div(static::SECONDS_IN_DAY);
     }
     
     /**
@@ -281,7 +281,7 @@ class DecimalTimeUtility
      */
     public function convertHoursToMonths($hours, $daysInMonth)
     {
-    	return (new Number($hours, $this->scale))->div($daysInMonth)->mul(static::HOURS_IN_DAY);
+    	return (new Number($hours, $this->scale))->div($daysInMonth)->div(static::HOURS_IN_DAY);
     }
     
     /**
@@ -293,7 +293,7 @@ class DecimalTimeUtility
      */
     public function convertMinutesToMonths($minutes, $daysInMonth)
     {
-    	return (new Number($minutes, $this->scale))->div($daysInMonth)->mul(static::MINUTES_IN_DAY);
+    	return (new Number($minutes, $this->scale))->div($daysInMonth)->div(static::MINUTES_IN_DAY);
     }
     
     /**
@@ -305,7 +305,7 @@ class DecimalTimeUtility
      */
     public function convertSecondsToMonths($seconds, $daysInMonth)
     {
-    	return (new Number($seconds, $this->scale))->div($daysInMonth)->mul(static::SECONDS_IN_DAY);
+    	return (new Number($seconds, $this->scale))->div($daysInMonth)->div(static::SECONDS_IN_DAY);
     }
     
     /**
