@@ -8,21 +8,19 @@ use BadMethodCallException;
 
 /**
  * Utility for precise Decimal Time Calculations
- * @TODO: Implement Month and Year - currently these will just be ignored!
- * as we don't need this functionality as of yet
  */
 class DecimalTimeUtility
-{
-    /**
-     * @var string
-     */
-    const MINUTES_IN_HOUR = '60';
-    
-    /**
-     * @var string
-     */
-    const SECONDS_IN_MINUTE = '60';
-    
+{    
+	/**
+	 * @var string
+	 */
+	const MONTHS_IN_YEAR = '12';
+	
+	/**
+	 * @var string
+	 */
+	const DAYS_IN_YEAR = '365';
+		
     /**
      * @var string
      */
@@ -41,7 +39,18 @@ class DecimalTimeUtility
     /**
      * @var string
      */
+    const MINUTES_IN_HOUR = '60';
+    
+    /**
+     * @var string
+     */
     const SECONDS_IN_HOUR = '3600';
+    
+    /**
+     * @var string
+     */
+    const SECONDS_IN_MINUTE = '60';
+        
     
     /**
      * @var string
@@ -58,6 +67,247 @@ class DecimalTimeUtility
     }
     
     /**
+     * Gets the number of leap years that occur between the start and end dates.
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return number of leap years
+     */
+    public function getLeapYears(DateTime $start, DateTime $end)
+    {
+    	$yearsToCheck = range($start->format('Y'), $end->format('Y'));
+    	 
+    	$leaps = 0;
+    	 
+    	foreach($yearsToCheck as $year)
+    		if(date('L', strtotime("$year-01-01")))
+    			$leaps++;
+    	
+    	return $leaps;
+    }
+    
+    /**
+     * Returns the decimal number of years for a given time period
+     *
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return PrecisionMaths\Number
+     */
+    public function dateRangeAsYears(DateTime $start, DateTime $end)
+    {
+    	$leaps = $this->getLeapYears($start, $end);
+    	    	
+    	$dateInterval = $this->calculateDateDiff($start, $end);
+    	
+    	$daysInYear = $this->getDaysInYear($dateInterval->y,$leaps);
+    	 
+    	$years = new Number($dateInterval->y, $this->scale);
+    	 
+    	$years = $years->add($this->convertMonthsToYears($dateInterval->m))
+    	->add($this->convertDaysToYears($dateInterval->d, $daysInYear))
+    	->add($this->convertHoursToYears($dateInterval->h, $daysInYear))
+    	->add($this->convertMinutesToYears($dateInterval->i, $daysInYear))
+    	->add($this->convertSecondsToYears($dateInterval->s, $daysInYear));
+    	 
+    	return $days;
+    }
+    
+    /**
+     * Returns the average number of days in a year based on total years and number of leap years
+     * @param mixed $years
+     * @param mixed $leaps
+     */
+    public function getDaysInYear($years, $leaps)
+    {
+    	$leapDays = (new Number($leaps, $this->scale))->add(static::DAYS_IN_YEAR);
+    	
+    	$nonLeaps = (new Number($years, $this->scale))->sub($leaps);
+    	
+    	$days = (new Number($nonLeaps, $this->scale))->mul(static::DAYS_IN_YEAR);
+    	
+    	$total = $days->add($leapDays);
+    	
+    	return $total->div($years);
+    }
+    
+    /**
+     * Converts decimal months into decimal years
+     *
+     * @param mixed $months
+     * @return PrecisionMaths\Number
+     */
+    public function convertMonthsToYears($months)
+    {
+    	return (new Number($months, $this->scale))->div(static::MONTHS_IN_YEAR);
+    }
+    
+    /**
+     * Converts decimal days into decimal years
+     *
+     * @param mixed $days
+     * @param mixed $daysInYear
+     * @return PrecisionMaths\Number
+     */
+    public function convertDaysToYears($days, $daysInYear)
+    {
+    	return (new Number($days, $this->scale))->div($daysInYear);
+    }
+    
+    /**
+     * Converts decimal hours into decimal years
+     *
+     * @param mixed $hours
+     * @param mixed $daysInYear
+     * @return PrecisionMaths\Number
+     */
+    public function convertHoursToYears($hours, $daysInYear)
+    {
+    	return (new Number($hours, $this->scale))->div($daysInYear)->mul(static::HOURS_IN_DAY);
+    }
+    
+    /**
+     * Converts decimal minutes into decimal years
+     *
+     * @param mixed $minutes
+     * @param mixed $daysInYear
+     * @return PrecisionMaths\Number
+     */
+    public function convertMinutesToYears($minutes, $daysInYear)
+    {
+    	return (new Number($minutes, $this->scale))->div($daysInYear)->mul(static::MINUTES_IN_DAY);
+    }
+    
+    /**
+     * Converts decimal seconds into decimal years
+     *
+     * @param mixed $seconds
+     * @param mixed $daysInYear
+     * @return PrecisionMaths\Number
+     */
+    public function convertSecondsToYears($seconds, $daysInYear)
+    {
+    	return (new Number($seconds, $this->scale))->div($daysInYear)->mul(static::SECONDS_IN_DAY);
+    }
+    
+    /**
+     * Returns the decimal number of months for a given time period
+     *
+     * @param DateTime $start
+     * @param DateTime $end
+     * @return PrecisionMaths\Number
+     */
+    public function dateRangeAsMonths(DateTime $start, DateTime $end)
+    {
+    	$leaps = $this->getLeapYears($start, $end);
+    	
+    	$monthRange = range($start->format('m'), $end->format('m'));
+    	
+    	$dateInterval = $this->calculateDateDiff($start, $end);
+    	 
+    	$months = new Number($dateInterval->m, $this->scale);
+    	
+    	$daysInMonth = $this->getDaysInMonth($monthRange, $dateInterval->y,$leaps);
+    	
+    	$months = $months->add($this->convertYearsToMonths($dateInterval->y))
+    	->add($this->convertDaysToMonths($dateInterval->d, $daysInMonth))
+    	->add($this->convertHoursToMonths($dateInterval->h, $daysInMonth))
+    	->add($this->convertMinutesToMonths($dateInterval->i, $daysInMonth))
+    	->add($this->convertSecondsToMonths($dateInterval->s, $daysInMonth));
+    	 
+    	return $days;
+    }
+    
+    /**
+     * Returns the average number of days in a month based on total years and number of leap years
+     * @param mixed $months
+     * @param mixed $years
+     * @param mixed $leaps
+     */
+    public function getDaysInMonth($months, $years, $leaps)
+    {
+    	$days = new Number(0, $this->scale);
+    	
+    	for($years; $years > 0; $years--)
+    		for($i = 1; i <= 12; $i++)
+    			$months[] = $i;
+    	
+    	foreach($months as $month)
+    	{
+    		if(in_array($month,['1','3','5','7','8','10','12']))
+    			$days->add('31');
+    		elseif($month !== '2')
+    			$days->add('30');
+    		elseif($leaps > 0)
+    		{
+    			$days->add('29');
+    			$leaps--;
+    		}
+    		else
+    			$days->add('28');
+    	}
+    	
+    	return $days->div(count($months));
+    }
+    
+    /**
+     * Converts decimal years into decimal months
+     *
+     * @param mixed $years
+     * @return PrecisionMaths\Number
+     */
+    public function convertYearsToMonths($years)
+    {
+    	return (new Number($years, $this->scale))->mul(static::MONTHS_IN_YEAR);
+    }
+    
+    /**
+     * Converts decimal days into decimal months
+     *
+     * @param mixed $days
+     * @param mixed $daysInMonth
+     * @return PrecisionMaths\Number
+     */
+    public function convertDaysToMonths($days, $daysInMonth)
+    {
+    	return (new Number($days, $this->scale))->div($daysInMonth);
+    }
+    
+    /**
+     * Converts decimal hours into decimal months
+     *
+     * @param mixed $hours
+     * @param mixed $daysInMonth
+     * @return PrecisionMaths\Number
+     */
+    public function convertHoursToMonths($hours, $daysInMonth)
+    {
+    	return (new Number($hours, $this->scale))->div($daysInMonth)->mul(static::HOURS_IN_DAY);
+    }
+    
+    /**
+     * Converts decimal minutes into decimal months
+     *
+     * @param mixed $minutes
+     * @param mixed $daysInMonth
+     * @return PrecisionMaths\Number
+     */
+    public function convertMinutesToMonths($minutes, $daysInMonth)
+    {
+    	return (new Number($minutes, $this->scale))->div($daysInMonth)->mul(static::MINUTES_IN_DAY);
+    }
+    
+    /**
+     * Converts decimal seconds into decimal months
+     *
+     * @param mixed $seconds
+     * @param mixed $daysInMonth
+     * @return PrecisionMaths\Number
+     */
+    public function convertSecondsToMonths($seconds, $daysInMonth)
+    {
+    	return (new Number($seconds, $this->scale))->div($daysInMonth)->mul(static::SECONDS_IN_DAY);
+    }
+    
+    /**
      * Returns the decimal number of days for a given time period
      * 
      * @param DateTime $start
@@ -68,7 +318,7 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $days = new Number($dateInterval->d, $this->scale);
+	    $days = new Number($dateInterval->days, $this->scale);
 	    
 	    $days = $days->add($this->convertHoursToDays($dateInterval->h))
 	                 ->add($this->convertMinutesToDays($dateInterval->i))
@@ -121,14 +371,14 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $hours = $this->convertDaysToHours($dateInterval->d)
+	    $hours = $this->convertDaysToHours($dateInterval->days)
 	                  ->add($dateInterval->h)
 	                  ->add($this->convertMinutesToHours($dateInterval->i))
 	                  ->add($this->convertSecondsToHours($dateInterval->s));
 	    
 	    return $hours;
 	}
-	
+		
 	/**
 	 * Converts decimal days into decimal hours
 	 *
@@ -173,14 +423,14 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $minutes = $this->convertDaysToMinutes($dateInterval->d)
-                        ->add($dateInterval->i)
+	    $minutes = $this->convertDaysToMinutes($dateInterval->days)
                         ->add($this->convertHoursToMinutes($dateInterval->h))
+                        ->add($dateInterval->i)
                         ->add($this->convertSecondsToMinutes($dateInterval->s));
 	    
 	    return $minutes;
 	}
-
+	
 	/**
 	 * Converts decimal days to decimal minutes
 	 *
@@ -225,9 +475,9 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $seconds = $this->convertDaysToSeconds($dateInterval->d)
+	    $seconds = $this->convertDaysToSeconds($dateInterval->days)
+	    				->add($this->convertHoursToSeconds($dateInterval->h))
 	                    ->add($this->convertMinutesToSeconds($dateInterval->i))
-	                    ->add($this->convertHoursToSeconds($dateInterval->h))
 	                    ->add($dateInterval->s);
 	
 	    return $seconds;
