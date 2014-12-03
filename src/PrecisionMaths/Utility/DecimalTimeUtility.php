@@ -228,7 +228,7 @@ class DecimalTimeUtility
     	$days = new Number(0, $this->scale);
     	
     	for($years; $years > 0; $years -= 1)
-    		for($i = 1; i <= 12; $i += 1)
+    		for($i = 1; $i <= 12; $i += 1)
     			$months[] = $i;
     	
     	foreach($months as $month)
