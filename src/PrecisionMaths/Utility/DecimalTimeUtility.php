@@ -205,7 +205,7 @@ class DecimalTimeUtility
     	 
     	$months = new Number($dateInterval->m, $this->scale);
     	
-    	$daysInMonth = $this->getDaysInMonth($monthRange, $dateInterval->y,$leaps);
+    	$daysInMonth = $this->calculateAverageDaysInMonth($monthRange, $dateInterval->y,$leaps);
     	
     	$months = $months->add($this->convertYearsToMonths($dateInterval->y))
     	->add($this->convertDaysToMonths($dateInterval->d, $daysInMonth))
