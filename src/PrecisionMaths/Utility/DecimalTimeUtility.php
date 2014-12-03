@@ -118,7 +118,7 @@ class DecimalTimeUtility
      */
     public function getDaysInYear($years, $leaps)
     {
-    	$leapDays = (new Number($leaps, $this->scale))->add(static::DAYS_IN_YEAR);
+    	$leapDays = (new Number($leaps, $this->scale))->mul(static::DAYS_IN_YEAR + 1);
     	
     	$nonLeaps = (new Number($years, $this->scale))->sub($leaps);
     	
