@@ -6,7 +6,7 @@ See <http://php.net/manual/en/book.bc.php> for more information on BC Math Exten
 
 ## Licence
 
-This library is (c) Switch Systems Ltd and is licenced under the [Mozilla Public License 2.0](https://www.mozilla.org/MPL/2.0/).
+This library is copyright 2014, 2015 Switch Systems Ltd and is licenced under the [Mozilla Public License 2.0](https://www.mozilla.org/MPL/2.0/).
 
 ## Number Class
 
