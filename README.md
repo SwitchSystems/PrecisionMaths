@@ -1,6 +1,6 @@
 # Precision Maths
 
-This module provides various classes for performing precision mathematics using BC MATH Internally 
+This module provides various classes for performing precision mathematics using BC MATH internally 
 
 See <http://php.net/manual/en/book.bc.php> for more information on BC Math Extension
 
