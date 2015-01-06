@@ -4,6 +4,10 @@ This module provides various classes for performing precision mathematics using 
 
 See <http://php.net/manual/en/book.bc.php> for more information on BC Math Extension
 
+## Licence
+
+This library is copyright 2014, 2015 Switch Systems Ltd and is licenced under the [Mozilla Public License 2.0](https://www.mozilla.org/MPL/2.0/).
+
 ## Number Class
 
 The precision number class provides all the basic math operations provides by the BC Math extension
