@@ -610,13 +610,25 @@ class Number
      * This is going to truncate precision greater than
      * than float max 
      *
+     * @deprecated deprecated since version 0.3.0
      * @return number
      */
     public function getValueAsFloat($precision = self::DEFAULT_SCALE)
     {
         return (float) (string) $this->impreciseRound($precision);
     }
-    
+
+    /**
+     * Converts value to float
+     * Precision may be lost when using this method
+     *
+     * @return number
+     */
+    public function convertToFloat()
+    {
+        return (float) (string) $this;
+    }
+
     /**
      * Checks if value is a whole number
      * 
