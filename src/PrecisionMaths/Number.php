@@ -1,4 +1,10 @@
 <?php
+/* Copyright (c) 2014, 2015 Switch Systems Ltd
+ *
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 namespace PrecisionMaths;
 
 use InvalidArgumentException;
@@ -604,13 +610,25 @@ class Number
      * This is going to truncate precision greater than
      * than float max 
      *
+     * @deprecated deprecated since version 0.3.0
      * @return number
      */
     public function getValueAsFloat($precision = self::DEFAULT_SCALE)
     {
         return (float) (string) $this->impreciseRound($precision);
     }
-    
+
+    /**
+     * Converts value to float
+     * Precision may be lost when using this method
+     *
+     * @return number
+     */
+    public function convertToFloat()
+    {
+        return (float) (string) $this;
+    }
+
     /**
      * Checks if value is a whole number
      * 

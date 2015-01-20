@@ -1,11 +1,17 @@
 <?php
+/* Copyright (c) 2014, 2015 Switch Systems Ltd
+ *
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 namespace PrecisionMathsTest\Utility;
 
 use PrecisionMaths\Utility\DecimalTimeUtility;
 use DateTime;
 
 class DecimalTimeUtilityTest extends \PHPUnit_Framework_TestCase
-{
+{	
 	public function testDateRangeHours()
 	{
 		$util = new DecimalTimeUtility(2);
@@ -108,10 +114,17 @@ class DecimalTimeUtilityTest extends \PHPUnit_Framework_TestCase
 	    $start = new DateTime('2014-05-02 9:00');
 	    $end = new DateTime('2014-05-03 9:00');
 	    $this->assertEquals('1.00', $util->dateRangeAsDays($start, $end));
-	    
 
 	    $start = new DateTime('2014-05-01 9:00:00');
 	    $end = new DateTime('2014-05-02 17:00:00');
 	    $this->assertEquals('1.33', $util->dateRangeAsDays($start, $end));
+	 
+		$start = new DateTime('2014-05-01 9:00:00');
+		$end = new DateTime('2015-07-02 17:00:00');
+		$this->assertEquals('427.33', $util->dateRangeAsDays($start, $end));
+		
+		$start = new DateTime('2014-05-01 9:00:00');
+		$end = new DateTime('2017-06-02 17:00:00');
+		$this->assertEquals('1128.33', $util->dateRangeAsDays($start, $end));
 	}
 }

@@ -1,4 +1,10 @@
 <?php
+/* Copyright (c) 2014, 2015 Switch Systems Ltd
+ *
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 namespace PrecisionMathsTest;
 
 use PrecisionMaths\Number;
@@ -417,5 +423,24 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $number = new Number('19.23432423', 20);
 	    $this->assertSame('-1', (string) $number->compare('21.23432423'));
 	    $this->assertSame('-1', (string) $number->comp('21.23432423'));
+	}
+
+	public function testConvertToFloat()
+	{
+		$number = new Number('21.342342342', 20);
+		$this->assertSame(21.342342342, $number->convertToFloat());
+	}
+
+	public function testConvertToFloatWithRounding()
+	{
+		$number = new Number('21.342342342', 20);
+		$number = $number->round(2);
+		$this->assertSame(21.34, $number->convertToFloat());
+	}
+
+	public function testConvertToFloatTwentyDecimalPlaces()
+	{
+		$number = new Number('2.456258785437', 20);
+		$this->assertSame(2.456258785437, $number->convertToFloat());
 	}
 }

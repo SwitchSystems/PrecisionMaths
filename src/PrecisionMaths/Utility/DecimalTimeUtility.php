@@ -1,4 +1,10 @@
 <?php
+/* Copyright (c) 2014, 2015 Switch Systems Ltd
+ *
+* This Source Code Form is subject to the terms of the Mozilla Public
+* License, v. 2.0. If a copy of the MPL was not distributed with this
+* file, You can obtain one at http://mozilla.org/MPL/2.0/. */
+
 namespace PrecisionMaths\Utility;
 
 use DateTime;
@@ -8,22 +14,11 @@ use BadMethodCallException;
 
 /**
  * Utility for precise Decimal Time Calculations
- * @TODO: Implement Month and Year - currently these will just be ignored!
- * as we don't need this functionality as of yet
+ * @TODO: Support for getting dateRange in Years and Months when required
  */
 class DecimalTimeUtility
-{
-    /**
-     * @var string
-     */
-    const MINUTES_IN_HOUR = '60';
-    
-    /**
-     * @var string
-     */
-    const SECONDS_IN_MINUTE = '60';
-    
-    /**
+{    
+	/**
      * @var string
      */
     const HOURS_IN_DAY = '24';
@@ -41,7 +36,18 @@ class DecimalTimeUtility
     /**
      * @var string
      */
+    const MINUTES_IN_HOUR = '60';
+    
+    /**
+     * @var string
+     */
     const SECONDS_IN_HOUR = '3600';
+    
+    /**
+     * @var string
+     */
+    const SECONDS_IN_MINUTE = '60';
+        
     
     /**
      * @var string
@@ -68,7 +74,7 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $days = new Number($dateInterval->d, $this->scale);
+	    $days = new Number($dateInterval->days, $this->scale);
 	    
 	    $days = $days->add($this->convertHoursToDays($dateInterval->h))
 	                 ->add($this->convertMinutesToDays($dateInterval->i))
@@ -121,14 +127,14 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $hours = $this->convertDaysToHours($dateInterval->d)
+	    $hours = $this->convertDaysToHours($dateInterval->days)
 	                  ->add($dateInterval->h)
 	                  ->add($this->convertMinutesToHours($dateInterval->i))
 	                  ->add($this->convertSecondsToHours($dateInterval->s));
 	    
 	    return $hours;
 	}
-	
+		
 	/**
 	 * Converts decimal days into decimal hours
 	 *
@@ -173,14 +179,14 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $minutes = $this->convertDaysToMinutes($dateInterval->d)
-                        ->add($dateInterval->i)
+	    $minutes = $this->convertDaysToMinutes($dateInterval->days)
                         ->add($this->convertHoursToMinutes($dateInterval->h))
+                        ->add($dateInterval->i)
                         ->add($this->convertSecondsToMinutes($dateInterval->s));
 	    
 	    return $minutes;
 	}
-
+	
 	/**
 	 * Converts decimal days to decimal minutes
 	 *
@@ -225,9 +231,9 @@ class DecimalTimeUtility
 	{
 	    $dateInterval = $this->calculateDateDiff($start, $end);
 	    
-	    $seconds = $this->convertDaysToSeconds($dateInterval->d)
+	    $seconds = $this->convertDaysToSeconds($dateInterval->days)
+	    				->add($this->convertHoursToSeconds($dateInterval->h))
 	                    ->add($this->convertMinutesToSeconds($dateInterval->i))
-	                    ->add($this->convertHoursToSeconds($dateInterval->h))
 	                    ->add($dateInterval->s);
 	
 	    return $seconds;
