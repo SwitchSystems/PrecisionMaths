@@ -424,4 +424,23 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 	    $this->assertSame('-1', (string) $number->compare('21.23432423'));
 	    $this->assertSame('-1', (string) $number->comp('21.23432423'));
 	}
+
+	public function testConvertToFloat()
+	{
+		$number = new Number('21.342342342', 20);
+		$this->assertSame(21.342342342, $number->convertToFloat());
+	}
+
+	public function testConvertToFloatWithRounding()
+	{
+		$number = new Number('21.342342342', 20);
+		$number = $number->round(2);
+		$this->assertSame(21.34, $number->convertToFloat());
+	}
+
+	public function testConvertToFloatTwentyDecimalPlaces()
+	{
+		$number = new Number('2.456258785437', 20);
+		$this->assertSame(2.456258785437, $number->convertToFloat());
+	}
 }
