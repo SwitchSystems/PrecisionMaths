@@ -498,7 +498,7 @@ class Number
      */
     public function numberFormat($precision)
     {
-        return self::create(number_format((float) (string) $this, $precision));
+        return self::create(number_format((float) (string) $this, $precision, '.', ''));
     }
 
     /**
