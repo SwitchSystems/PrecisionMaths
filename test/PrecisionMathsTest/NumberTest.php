@@ -443,4 +443,23 @@ class NumberTest extends \PHPUnit_Framework_TestCase
 		$number = new Number('2.456258785437', 20);
 		$this->assertSame(2.456258785437, $number->convertToFloat());
 	}
+
+	public function testNumberFormat()
+	{
+		$number = new Number('2.456258785437', 20);
+		$this->assertSame('2.46', (string) $number->numberFormat(2));
+		$this->assertSame(2.46, $number->numberFormat(2)->convertToFloat());
+
+		$number = new Number('200000.456258785437', 20);
+		$this->assertSame('200000.46', (string) $number->numberFormat(2));
+		$this->assertSame(200000.46, $number->numberFormat(2)->convertToFloat());
+
+		$number = new Number('2.454258785437', 20);
+		$this->assertSame('2.45', (string) $number->numberFormat(2));
+		$this->assertSame(2.45, $number->numberFormat(2)->convertToFloat());
+
+		$number = new Number('2.45458785437', 20);
+		$this->assertSame('2.45', (string) $number->numberFormat(2));
+		$this->assertSame(2.45, $number->numberFormat(2)->convertToFloat());
+	}
 }
