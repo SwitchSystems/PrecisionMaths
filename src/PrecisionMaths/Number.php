@@ -475,7 +475,7 @@ class Number
     /**
      * Rounds the number as per php round function
      * this method DOES NOT use arbitrary precision style rounding
-     * but Number::precisionRound does
+     * but Number::round does
      *
      * @see http://php.net/manual/en/function.round.php
      * @param integer $precision
@@ -486,7 +486,21 @@ class Number
     {
         return self::create(round((string) $this, $precision, $type));
     }
-    
+
+    /**
+     * Rounds the number as per php number_format function
+     * this method DOES NOT use arbitrary precision style rounding
+     * but Number::round does
+     *
+     * @see @link http://php.net/manual/en/function.number-format.php
+     * @param integer $precision
+     * @return Ambigous <\PrecisionMaths\Number, \PrecisionMaths\Number>
+     */
+    public function numberFormat($precision)
+    {
+        return self::create(number_format((float) (string) $this, $precision, '.', ''));
+    }
+
     /**
      * Chops the end of after precision significant figure has been reached
      * 
